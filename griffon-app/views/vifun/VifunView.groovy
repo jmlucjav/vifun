@@ -72,9 +72,9 @@ application(title: 'vifun',
 
             }
         }
-        panel(border:lineBorder(color:Color.BLACK), name:'resPanel', layout:new MigLayout('fill'), constraints: "east, growx, growy, width 500:870:1000, gapy 0:0:0, gapx 0:0:0") {
+        panel(border:lineBorder(color:Color.BLACK), name:'resPanel', layout:new MigLayout('fill'), constraints: "east, growx, growy, width 500:870:1600, gapy 0:0:0, gapx 0:0:0") {
             //button ("Save Baseline", constraints: "south, width 150:150:150", enabled: bind{model.enabledTake}, actionPerformed: controller.takeBaselineSnapshot)
-            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:440:550") {
+            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:440:1050") {
                 label 'Current Result'
                 scrollPane (constraints: "growx, growy") {
                     table( new CurrentTable(), id: 'ctable') {
@@ -85,7 +85,7 @@ application(title: 'vifun',
                 }
                 currentParam = textArea(text: bind('currentParam', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledCurrentParam})
             }
-            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0, width 200:350:400") {
+            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0, width 200:350:700") {
                 label 'Baseline Result'
                 scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
                     table( new BaselineTable(), id: 'btable') {

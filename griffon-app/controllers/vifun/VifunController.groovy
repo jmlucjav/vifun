@@ -27,7 +27,9 @@ class VifunController {
     void mvcGroupInit(Map args) {
         model.propertyChange = {
             if (it.propertyName == 'tweakedFValueNew') {
-                runQueryAndCompare()
+                doLater{
+                    runQueryAndCompare()
+                }
             }
             if (model.qset.contains(it.propertyName)||it.propertyName == 'rest') {
                 invalidateBaseline()
