@@ -58,6 +58,8 @@ application(title: 'vifun',
                     pf = textField name: 'pf', text: bind('pf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
                     lbf = label 'bf:'
                     bf = textField name: 'bf', text: bind('bf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
+                    lboost = label 'boost:'
+                    boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
                     lmm = label 'mm:'
                     mm = textField name: 'mm', text: bind('mm', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
                     //ltie = label 'tie:'

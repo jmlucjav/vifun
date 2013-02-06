@@ -1,3 +1,19 @@
+/**
+ * Copyright 2013  jmlucjav@gmail.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+   
 package vifun
 
 import groovy.beans.Bindable
@@ -44,9 +60,10 @@ class VifunModel {
     @Bindable String qf
     @Bindable String bf
     @Bindable String pf
+    @Bindable String boost
     @Bindable String mm
     //@Bindable String tie
-    List<String> fset = ['qf','pf', 'bf', 'mm']
+    List<String> fset = ['qf','pf', 'bf', 'boost', 'mm']
 
     //change selected bf...
     @Bindable String tweakedFName
