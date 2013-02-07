@@ -42,7 +42,8 @@ class SolrOps {
         QueryResponse rsp = getServer().query(params);
         def results = []
         int i = 0
-        rsp.getResults().each { doc ->
+        def res = rsp.getResults()
+        res.each { doc ->
             def map = [:]
             map.pos = i++
             map.id = doc.getFieldValue(idfield)

@@ -43,6 +43,7 @@ class VifunController {
                 model.enabledHandlerText = model.handler != null
                 model.enabledCurrentParam = model.currentMap != null
                 model.enabledBaselineParam = model.baselineMap != null
+                model.enabledErrMsg = model.errMsg && true
             }
         }
         //add listeners for target selection
@@ -225,9 +226,20 @@ class VifunController {
     }
 
     def runQuery(boolean tweaking) {
+        model.errMsg = ''
         //build params and search
-        def params = model.solr.defineQueryParams(model, model.handlerm['defaults'], tweaking)
-        def result = model.solr.search(params)
+        def params
+        def result
+        try {
+            params = model.solr.defineQueryParams(model, model.handlerm['defaults'], tweaking)
+            result = model.solr.search(params)
+        }catch(Exception e){
+            doLater{
+                def errstr ="Error: ${e.getMessage()}"
+                log.error errstr
+                model.errMsg = errstr 
+            }
+        }
         doLater {
             model.currentMap = result
             log.debug "Results: ${model.q} ${result}"
@@ -245,8 +257,8 @@ class VifunController {
                 if (tweaking) {
                     //find how the doc did in baseline
                     def bd = model.baselineMap.find { it.id == d.id }
-                    bdpos = bd ? bd.pos.toInteger() - d.pos.toInteger() : '-'
-                    bdscore = bd ? d.score.toFloat() - bd.score.toFloat() : '-'
+                    bdpos = bd ? bd.pos.toInteger() - d.pos.toInteger() : '+'
+                    bdscore = bd ? d.score.toFloat() - bd.score.toFloat() : '+'
                     line += "${d.pos}($bdpos) ${fstring}: ${d.score}($bdscore)\n"
                 } else {
                     line += "${d.pos} ${fstring}: ${d.score}\n"
@@ -255,6 +267,7 @@ class VifunController {
             }
             model.currentParam = ""
             view.currentParam.toolTipText = "<html>"
+            view.foreground = Color.BLACK
             Iterator<String> iterator = params.getParameterNamesIterator();
             while (iterator.hasNext()) {
                 String k = iterator.next()
@@ -284,6 +297,7 @@ class VifunController {
 
     def invalidateBaseline() {
         doLater {
+            model.errMsg = ''
             model.currentMap = null
             model.ctable.clear()
             model.currentParam = ''

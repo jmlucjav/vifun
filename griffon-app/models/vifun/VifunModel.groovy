@@ -40,6 +40,8 @@ class VifunModel {
     List<Map> baselineMap = []
     @Bindable String baselineParam
 
+    @Bindable String errMsg
+
     //buttons enabled?
     @Bindable boolean enabledQuery
     //@Bindable boolean enabledTake
@@ -49,6 +51,7 @@ class VifunModel {
     @Bindable boolean enabledHandlerText
     @Bindable boolean enabledCurrentParam
     @Bindable boolean enabledBaselineParam
+    @Bindable boolean enabledErrMsg
 
     //params
     @Bindable String q = 'm'
@@ -75,10 +78,12 @@ class VifunModel {
     def columns = [[name: 'pos', title: 'Rank'],[name: 'posdelta', title: 'Delta'],[name: 'docfields', title: 'Doc'], [name: 'score', title: 'Score'],[name: 'scoredelta', title: 'Delta']]
     def columnsbaseline = [[name: 'pos', title: 'Rank'],[name: 'docfields', title: 'Doc'], [name: 'score', title: 'Score']]
     def rowComparator ={a,b ->
-        if ('-'.equals(a) && '-'.equals(b)) return 0
-        if ('-'.equals(a)) return -1
-        if ('-'.equals(b)) return 1
-        return a.pos<=> b.pos
+        if ('+'.equals(a) && '+'.equals(b)) return 0
+        if ('+'.equals(a)) return 1
+        if ('+'.equals(b)) return -1
+        if (a==null) return -1
+        if (b==null) return 1
+        return a.pos<=>b.pos
     }
     EventList ctable = new SortedList( new BasicEventList(), rowComparator as Comparator)
     EventList btable = new SortedList( new BasicEventList(), rowComparator as Comparator)

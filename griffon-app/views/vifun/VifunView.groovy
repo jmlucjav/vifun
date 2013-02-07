@@ -27,7 +27,7 @@ application(title: 'vifun',
                 comboBox(id:'handlersCombo', visible: bind{model.enabledHandlerText}, actionPerformed: controller.selectHander, selectedItem: bind(target:model, targetProperty:'handler'), constraints: "wrap")
                 //comboBox(id:'handlersCombo', model: eventComboBoxModel(source: model.handlerList), actionPerformed: controller.selectHander, selectedItem: bind(target:model, targetProperty:'handler'), constraints: "wrap")
                 scrollPane (constraints: "growx, growy, width 200:350:400, height 200:350:400, span 5", visible: bind{model.enabledHandlerText}) {
-                    textArea(text: bind('handlerText', source: model, mutual: true), constraints: "span 8")
+                    textArea(text: bind('handlerText', source: model, mutual: true), constraints: "span 8", editable:false)
                 }        
             }
             panel(name:'fPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
@@ -41,7 +41,11 @@ application(title: 'vifun',
                 label 'rest:' 
                 textField text: bind('rest', source: model, mutual: true), columns: 30, constraints: "wrap, span 3"
                 label '(i.e sfield=store&pt=45.15,-93.85)', constraints: "wrap, span 3"
-                button ("Run Query" , enabled: bind{model.enabledQuery}, name: 'runQuery', actionPerformed: controller.runQuery)
+                button ("Run Query" , enabled: bind{model.enabledQuery}, name: 'runQuery', actionPerformed: controller.runQuery, constraints: "wrap")
+                scrollPane (constraints: "growx, growy, width 200:350:400, height 50:100:100, spanx 2, spany 2", visible: bind{model.enabledErrMsg}) {
+                    errMsg = textArea(text: bind('errMsg', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledErrMsg}, rows:2, columns: 25, editable:false)
+                    errMsg.setForeground(Color.RED)
+                }    
             }
 
             //boost values
@@ -85,7 +89,7 @@ application(title: 'vifun',
                         installTableComparatorChooser(source: model.ctable)
                     }
                 }
-                currentParam = textArea(text: bind('currentParam', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledCurrentParam})
+                currentParam = textArea(text: bind('currentParam', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledCurrentParam}, editable:false)
             }
             panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0, width 200:350:700") {
                 label 'Baseline Result'
@@ -96,7 +100,7 @@ application(title: 'vifun',
                         installTableComparatorChooser(source: model.btable)
                     }
                 }
-                baselineParam = textArea(text: bind('baselineParam', source: model, mutual: true),constraints: "growx", visible: bind{model.enabledBaselineParam})
+                baselineParam = textArea(text: bind('baselineParam', source: model, mutual: true),constraints: "growx", visible: bind{model.enabledBaselineParam}, editable:false)
             }
             ctable.columnModel.getColumn(0).setPreferredWidth(20)
             ctable.columnModel.getColumn(1).setPreferredWidth(25)

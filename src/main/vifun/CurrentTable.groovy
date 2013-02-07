@@ -25,7 +25,7 @@ public class CurrentTable extends JTable {
             int modelRow = convertRowIndexToModel(row);
             if (getModel().getValueAt(modelRow, 1)) {
                 String deltapos = (String) getModel().getValueAt(modelRow, 1)
-                if ('-'.equals(deltapos)) {
+                if ('+'.equals(deltapos)) {
                     c.setBackground(DARK_GREEN)
                 } else {
                     switch (deltapos as Integer) {
