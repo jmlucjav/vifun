@@ -18,28 +18,38 @@ public class CurrentTable extends JTable {
 
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component c = super.prepareRenderer(renderer, row, column);
+        c.setBackground(getBackground());
+        //only on delta columns
+        if (column !=1 && column != 4) {
+            return c
+        }
         //  Color row based on a cell value
-        if (!isRowSelected(row)) {
-            int halfRows = (griffon.util.ApplicationHolder.application.models.vifun.rows as Integer)/2
-            c.setBackground(getBackground());
-            int modelRow = convertRowIndexToModel(row);
-            if (getModel().getValueAt(modelRow, 1)) {
-                String deltapos = (String) getModel().getValueAt(modelRow, 1)
-                if ('+'.equals(deltapos)) {
-                    c.setBackground(DARK_GREEN)
-                } else {
-                    switch (deltapos as Integer) {
-                        case 1..halfRows:
-                            c.setBackground(LIGHT_GREEN); break
-                        case halfRows+1..Integer.MAX_VALUE:
-                            c.setBackground(DARK_GREEN); break
-                        case Integer.MIN_VALUE+1..-halfRows:
-                            c.setBackground(DARK_RED); break
-                        case -halfRows+1..-1:
-                            c.setBackground(LIGHT_RED); break
-                        default:
-                            c.setBackground(Color.LIGHT_GRAY); break
-                    }
+        if (isRowSelected(row)) {
+            return c
+        }
+        float halfRows
+        if (column==1) {
+            halfRows = (griffon.util.ApplicationHolder.application.models.vifun.rows as Integer)/2
+        }else{
+            halfRows = (griffon.util.ApplicationHolder.application.models.vifun.maxScoreDiff)/2
+        }
+        int modelRow = convertRowIndexToModel(row);
+        String delta = getModel().getValueAt(modelRow, column)
+        if (delta) {
+            if ('+'.equals(delta)) {
+                c.setBackground(DARK_GREEN)
+            } else {
+                float deltaf = delta as Float
+                if (deltaf < -halfRows){
+                        c.setBackground(DARK_RED)
+                }else if (deltaf < 0){
+                        c.setBackground(LIGHT_RED)
+                }else if (deltaf == 0){
+                    return c
+                }else if (deltaf < halfRows){
+                        c.setBackground(LIGHT_GREEN)
+                }else {
+                        c.setBackground(DARK_GREEN)
                 }
             }
         }

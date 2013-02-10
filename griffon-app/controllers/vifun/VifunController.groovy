@@ -227,6 +227,7 @@ class VifunController {
 
     def runQuery(boolean tweaking) {
         model.errMsg = ''
+        model.maxScoreDiff = 0
         //build params and search
         def params
         def result
@@ -259,6 +260,8 @@ class VifunController {
                     def bd = model.baselineMap.find { it.id == d.id }
                     bdpos = bd ? bd.pos.toInteger() - d.pos.toInteger() : '+'
                     bdscore = bd ? d.score.toFloat() - bd.score.toFloat() : '+'
+                    def absdscore = bd ? Math.abs(d.score.toFloat()-bd.score.toFloat()) : 0
+                    model.maxScoreDiff = Math.max(model.maxScoreDiff,absdscore)
                     line += "${d.pos}($bdpos) ${fstring}: ${d.score}($bdscore)\n"
                 } else {
                     line += "${d.pos} ${fstring}: ${d.score}\n"

@@ -6,6 +6,9 @@ import javax.swing.event.ChangeEvent
 import javax.swing.event.ChangeListener
 import java.awt.*
 import java.awt.event.FocusEvent;
+import ca.odell.glazedlists.swing.*
+import ca.odell.glazedlists.gui.*
+import ca.odell.glazedlists.*
 
 
 application(title: 'vifun',
@@ -83,11 +86,17 @@ application(title: 'vifun',
             panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:440:1050") {
                 label 'Current Result'
                 scrollPane (constraints: "growx, growy") {
-                    table( new CurrentTable(), id: 'ctable') {
+                    ctable = table( new CurrentTable(), id: 'ctable') {
                         tableFormat = defaultTableFormat(columns: model.columns)
                         eventTableModel(source: model.ctable, format: tableFormat)
-                        installTableComparatorChooser(source: model.ctable)
+                        //installTableComparatorChooser(source: model.ctable)
                     }
+                    //setup custom comparator where needed (delta cols)
+                    TableComparatorChooser tableSorter = TableComparatorChooser.install(ctable, model.ctable, AbstractTableComparatorChooser.SINGLE_COLUMN);
+                    tableSorter.getComparatorsForColumn(1).clear()
+                    tableSorter.getComparatorsForColumn(1).add(model.deltaPosComparator)
+                    tableSorter.getComparatorsForColumn(4).clear()
+                    tableSorter.getComparatorsForColumn(4).add(model.deltaScoreComparator)
                 }
                 currentParam = textArea(text: bind('currentParam', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledCurrentParam}, editable:false)
             }

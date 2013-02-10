@@ -74,17 +74,23 @@ class VifunModel {
     @Bindable String tweakedFValue
     @Bindable String tweakedFValueNew
 
+    float maxScoreDiff
     //glazedlist stuff
     def columns = [[name: 'pos', title: 'Rank'],[name: 'posdelta', title: 'Delta'],[name: 'docfields', title: 'Doc'], [name: 'score', title: 'Score'],[name: 'scoredelta', title: 'Delta']]
     def columnsbaseline = [[name: 'pos', title: 'Rank'],[name: 'docfields', title: 'Doc'], [name: 'score', title: 'Score']]
-    def rowComparator ={a,b ->
+    def deltaPosComparator = {a,b -> return deltaCompare(a.posdelta, b.posdelta)}as Comparator
+    def deltaScoreComparator = {a,b -> return deltaCompare(a.scoredelta, b.scoredelta)}as Comparator
+    int deltaCompare (String a, String b){
+        if (!a && !b) return 0
+        if (!a) return -1
+        if (!b) return 1
         if ('+'.equals(a) && '+'.equals(b)) return 0
         if ('+'.equals(a)) return 1
         if ('+'.equals(b)) return -1
-        if (a==null) return -1
-        if (b==null) return 1
-        return a.pos<=>b.pos
+        return Double.compare(a as Double, b as Double)
     }
-    EventList ctable = new SortedList( new BasicEventList(), rowComparator as Comparator)
-    EventList btable = new SortedList( new BasicEventList(), rowComparator as Comparator)
+    //EventList ctable = new BasicEventList(), {a, b -> a.pos <=> b.pos} as Comparator)
+    //EventList btable = new BasicEventList(), {a, b -> a.pos <=> b.pos} as Comparator)
+    EventList ctable = new SortedList(new BasicEventList(), {a, b -> a.pos <=> b.pos} as Comparator)
+    EventList btable = new SortedList(new BasicEventList(), {a, b -> a.pos <=> b.pos} as Comparator)
 }
