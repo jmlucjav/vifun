@@ -1,6 +1,6 @@
 package vifun
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -21,8 +21,11 @@ import javax.swing.plaf.metal.MetalToolTipUI;
 
 //http://jexp.ru/index.php/Java/Swing_JFC/Tooltip
 public class MultiLineToolTip extends JToolTip {
+    Font mfont = new Font("Verdana", Font.PLAIN, 10)
     public MultiLineToolTip() {
         setUI(new MultiLineToolTipUI());
+        setFont(mfont)
+        setBackground(new Color(255, 231, 135))
     }
 }
 class MultiLineToolTipUI extends MetalToolTipUI {

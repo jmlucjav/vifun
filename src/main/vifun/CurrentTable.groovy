@@ -56,24 +56,41 @@ public class CurrentTable extends JTable {
         return c;
     }
 
-    //http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#celltooltip
     public String getToolTipText(MouseEvent e) {
         String tip = "unknown"
         java.awt.Point p = e.getPoint();
         int rowIndex = rowAtPoint(p);
         int colIndex = columnAtPoint(p);
-        int realColumnIndex = convertColumnIndexToModel(colIndex);
+        int colRow = convertColumnIndexToModel(colIndex);
+        int modelRow = convertRowIndexToModel(rowIndex);
 
         TableModel tmodel = getModel();
         //get id
         String id = vmodel.currentMap[rowIndex].id
-        //get doc in current
-        def curdoc = vmodel.currentMap.find{it.id==id}
-        if (curdoc){
-            tip = curdoc.explain
+        switch (colRow){
+            case [0, 3]:
+                //get doc in baseline
+                def curdoc = vmodel.baselineMap.find { it.id == id }
+                if (curdoc) {
+                    tip = "Baseline: Pos: ${curdoc.pos} Score:${curdoc.score}"
+                }
+                break
+            case [1,4]:
+                def curdoc = vmodel.currentMap.find { it.id == id }
+                if (curdoc) {
+                    tip = "${curdoc.explain}"
+                }
+                break
+            case 2:
+                String val = tmodel.getValueAt(modelRow, colRow)
+                if (val) {
+                    tip = val
+                }
+                break
         }
         return tip;
     }
+
     public JToolTip createToolTip() {
         MultiLineToolTip tip = new MultiLineToolTip();
         tip.setComponent(this);
