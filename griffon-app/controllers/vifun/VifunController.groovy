@@ -159,6 +159,8 @@ class VifunController {
                 }
                 if (model.fset.contains(it.key)) {
                     model."${it.key}" = it.value
+                    //add new textfield in view
+                    //view.fpanel.add()
                 }
                 t << it.key + ':' + it.value + '\n'
             }
@@ -173,35 +175,61 @@ class VifunController {
     //this should operate on model.handlerList, not view.handlersCombo
     def showHandlers = { evt = null ->
         doLater { ot ->
-            view.handlersCombo.clear()
-            model.solr.init(model.solrurl)
-            String orightml = model.solr.getSolrconfig()
-            def tbl = new XmlSlurper().parseText(orightml)
-            def qhandlers = tbl.requestHandler.findAll { it.@class == 'solr.SearchHandler' }
-            qhandlers.each { it ->
-                view.handlersCombo.addItem it.@name
-                //we need to explicitely get toString otherwise the object is used
-                def n = (it.@name).toString()
-                def m = model.handlers
-                model.handlers.putAt(n, [:])
-                model.handlers[n]['defaults'] = [:]
-                model.handlers[n]['appends'] = [:]
-                //no idea why these f calls dont work, closures work though.
-                addHandlerParams(model.handlers[n], it, 'defaults')
-                addHandlerParams(model.handlers[n], it, 'appends')
-                def p = it.lst.find { it.@name == 'defaults' }.children()
-                p.each { pi ->
-                    model.handlers[n]['defaults'][(pi.@name).toString()] = pi.text()
+            invalidateBaseline()
+            //shameful but just want to get rid of that exception...
+            try{view.handlersCombo.clear()}catch(e){}
+            try{view.handlersCombo.clear()}catch(e){}
+            try{
+                model.solr.init(model.solrurl)
+                String orightml = model.solr.getSolrconfig()
+                def tbl = new XmlSlurper().parseText(orightml)
+                def qhandlers = tbl.requestHandler.findAll { it.@class == 'solr.SearchHandler' }
+                qhandlers.each { it ->
+                    view.handlersCombo.addItem it.@name
+                    //we need to explicitely get toString otherwise the object is used
+                    def n = (it.@name).toString()
+                    def m = model.handlers
+                    model.handlers.putAt(n, [:])
+                    model.handlers[n]['defaults'] = [:]
+                    model.handlers[n]['appends'] = [:]
+                    //no idea why these f calls dont work, closures work though.
+                    addHandlerParams(model.handlers[n], it, 'defaults')
+                    addHandlerParams(model.handlers[n], it, 'appends')
+                    def p = it.lst.find { it.@name == 'defaults' }.children()
+                    p.each { pi ->
+                        model.handlers[n]['defaults'][(pi.@name).toString()] = pi.text()
+                    }
+                    p = it.lst.find { it.@name == 'appends' }.children()
+                    p.each { pi ->
+                        model.handlers[n]['appends'][(pi.@name).toString()] = pi.text()
+                    }
                 }
-                p = it.lst.find { it.@name == 'appends' }.children()
-                p.each { pi ->
-                    model.handlers[n]['appends'][(pi.@name).toString()] = pi.text()
+            }catch(Throwable e){
+                doLater{
+                    def errstr ="Error: ${e.getMessage()}"
+                    //showError(errstr) 
+                    log.error errstr
+                    model.errMsg = errstr
+                    view.errMsgP.invalidate()
+                    view.panel.validate()
+                    javax.swing.SwingUtilities.getRoot(view.panel).pack()
+                    view.panel.repaint()
                 }
             }
-            invalidateBaseline()
         }
     }
-
+    //not sure why, but if I use these methods instead of inlining, it hangs eventually
+    //def showError(String errstr){
+        //log.error errstr
+        //model.errMsg = errstr
+        //view.errMsgP.invalidate()
+        //view.panel.validate()
+        //javax.swing.SwingUtilities.getRoot(view.panel).pack()
+        //view.panel.repaint()
+    //}
+    //def clearError(){
+        //showError('')
+    //}      
     def runQuery = {
         runQuery()
     }
@@ -226,7 +254,13 @@ class VifunController {
     }
 
     def runQuery(boolean tweaking) {
-        model.errMsg = ''
+        //model.errMsg = ''
+        //clearError()
+                    //model.errMsg = ''
+                    //view.errMsgP.invalidate()
+                    //view.panel.validate()
+                    //javax.swing.SwingUtilities.getRoot(view.panel).pack()
+                    //view.panel.repaint()
         model.maxScoreDiff = 0
         //build params and search
         def params
@@ -237,8 +271,13 @@ class VifunController {
         }catch(Exception e){
             doLater{
                 def errstr ="Error: ${e.getMessage()}"
-                log.error errstr
-                model.errMsg = errstr 
+                //showError(errstr)
+        log.error errstr
+        model.errMsg = errstr
+        view.errMsgP.invalidate()
+        view.panel.validate()
+        javax.swing.SwingUtilities.getRoot(view.panel).pack()
+        view.panel.repaint()
             }
         }
         doLater {
@@ -300,7 +339,6 @@ class VifunController {
 
     def invalidateBaseline() {
         doLater {
-            model.errMsg = ''
             model.currentMap = null
             model.ctable.clear()
             model.currentParam = ''
@@ -313,6 +351,12 @@ class VifunController {
             model.tweakedFFormula = ''
             model.tweakedFValue = ''
             resetFFieldsLabels()
+            //clearError()
+            model.errMsg = ''
+            view.errMsgP.invalidate()
+            view.panel.validate()
+            javax.swing.SwingUtilities.getRoot(view.panel).pack()
+            view.panel.repaint()
         }
     }
 }

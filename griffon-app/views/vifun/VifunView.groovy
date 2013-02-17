@@ -12,15 +12,15 @@ import ca.odell.glazedlists.*
 
 
 application(title: 'vifun',
-  preferredSize: [1280, 900],
+  preferredSize: [1480, 900],
   pack: true,
   locationByPlatform:true,
   iconImage: imageIcon('/griffon-icon-48x48.png').image,
   iconImages: [imageIcon('/griffon-icon-48x48.png').image,
                imageIcon('/griffon-icon-32x32.png').image,
                imageIcon('/griffon-icon-16x16.png').image]) {
-    panel(border:emptyBorder(1), layout:new MigLayout('fill')) {
-        panel(border:lineBorder(color:Color.BLACK), name:'qPanel', layout:new MigLayout('fill'), constraints: "west, width 150:400:450") {
+    panel = panel(border:emptyBorder(1), layout:new MigLayout('fill')) {
+        qpanel = panel(border:lineBorder(color:Color.BLACK), name:'qPanel', layout:new MigLayout('fill'), constraints: "west, width 350:400:400") {
             panel(name:'buttonPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
                 label 'Solr URL:'
                 textField text: bind('solrurl', source: model, mutual: true),columns: 25, editable:true
@@ -33,7 +33,7 @@ application(title: 'vifun',
                     textArea(text: bind('handlerText', source: model, mutual: true), constraints: "span 8", editable:false)
                 }        
             }
-            panel(name:'fPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
+            ppanel = panel(name:'pPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
                 label 'Query params:', constraints: "wrap, span 3"
                 label 'q:'
                 textField text: bind('q', source: model, mutual: true), columns: 30, constraints: "wrap, span 3"
@@ -45,15 +45,16 @@ application(title: 'vifun',
                 textField text: bind('rest', source: model, mutual: true), columns: 30, constraints: "wrap, span 3"
                 label '(i.e sfield=store&pt=45.15,-93.85)', constraints: "wrap, span 3"
                 button ("Run Query" , enabled: bind{model.enabledQuery}, name: 'runQuery', actionPerformed: controller.runQuery, constraints: "wrap")
-                scrollPane (constraints: "growx, growy, width 200:350:400, height 50:100:100, spanx 2, spany 2", visible: bind{model.enabledErrMsg}) {
-                    errMsg = textArea(text: bind('errMsg', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledErrMsg}, rows:2, columns: 25, editable:false)
+                //errMsgP = scrollPane (constraints: "growx, growy, width 0:0:400, height 0:0:100, spanx 2, spany 2", visible: bind{model.enabledErrMsg}) {
+                errMsgP = scrollPane (constraints: "growx, growy, width 200:350:400, height 50:100:100, spanx 2, spany 2, hidemode 2", visible: bind{model.enabledErrMsg}) {
+                    errMsg = textArea(text: bind('errMsg', source: model, mutual: true), constraints: "growx, hidemode 2", visible: bind{model.enabledErrMsg}, rows:2, columns: 25, editable:false)
                     errMsg.setForeground(Color.RED)
                 }    
             }
 
             //boost values
             //panel(border:lineBorder(color:Color.BLACK),name:'boostPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
-            panel(name:'boostPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
+            fpanel = panel(name:'boostPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
                     label 'Scoring:'
                     ltweak = label 'Select a number as target to tweak', visible: bind{model.enabledBind}, constraints: "wrap, span 3"
                     ltweak.setFont(new Font("Serif", Font.BOLD, 14))
@@ -81,9 +82,9 @@ application(title: 'vifun',
 
             }
         }
-        panel(border:lineBorder(color:Color.BLACK), name:'resPanel', layout:new MigLayout('fill'), constraints: "east, growx, growy, width 500:870:1600, gapy 0:0:0, gapx 0:0:0") {
+        panel(border:lineBorder(color:Color.BLACK), name:'resPanel', layout:new MigLayout('fill'), constraints: "east, growx, growy, width 500:1200:1600, gapy 0:0:0, gapx 0:0:0") {
             //button ("Save Baseline", constraints: "south, width 150:150:150", enabled: bind{model.enabledTake}, actionPerformed: controller.takeBaselineSnapshot)
-            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:440:1050") {
+            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:740:1050") {
                 label 'Current Result'
                 scrollPane (constraints: "growx, growy") {
                     ctable = table( new CurrentTable(), id: 'ctable') {
@@ -100,7 +101,7 @@ application(title: 'vifun',
                 }
                 currentParam = textArea(text: bind('currentParam', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledCurrentParam}, editable:false)
             }
-            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0, width 200:350:700") {
+            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0, width 200:500:700") {
                 label 'Baseline Result'
                 scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
                     table( new BaselineTable(), id: 'btable') {
@@ -112,12 +113,12 @@ application(title: 'vifun',
                 baselineParam = textArea(text: bind('baselineParam', source: model, mutual: true),constraints: "growx", visible: bind{model.enabledBaselineParam}, editable:false)
             }
             ctable.columnModel.getColumn(0).setPreferredWidth(20)
-            ctable.columnModel.getColumn(1).setPreferredWidth(25)
-            ctable.columnModel.getColumn(2).setPreferredWidth(220)
+            ctable.columnModel.getColumn(1).setPreferredWidth(20)
+            ctable.columnModel.getColumn(2).setPreferredWidth(280)
             ctable.columnModel.getColumn(3).setPreferredWidth(60)
             ctable.columnModel.getColumn(4).setPreferredWidth(60)
             btable.columnModel.getColumn(0).setPreferredWidth(20)
-            btable.columnModel.getColumn(1).setPreferredWidth(220)
+            btable.columnModel.getColumn(1).setPreferredWidth(280)
             btable.columnModel.getColumn(2).setPreferredWidth(60)
         }
     }
