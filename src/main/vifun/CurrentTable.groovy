@@ -19,12 +19,15 @@ public class CurrentTable extends JTable {
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component c = super.prepareRenderer(renderer, row, column);
         c.setBackground(getBackground());
+        //do this otherwise selected row is unreadable
+        c.setForeground(Color.BLACK)
         //only on delta columns
         if (column !=1 && column != 4) {
             return c
         }
         //  Color row based on a cell value
         if (isRowSelected(row)) {
+            //c.setBackground(Color.YELLOW)
             return c
         }
         float halfRows
