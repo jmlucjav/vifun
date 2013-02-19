@@ -44,9 +44,9 @@ class VifunController {
                 model.enabledCurrentParam = model.currentMap != null
                 model.enabledBaselineParam = model.baselineMap != null
                 model.enabledErrMsg = model.errMsg && true
-                model.enabledBf0 = model.bf_0 && true
-                model.enabledBf1 = model.bf_1 && true
-                model.enabledBf2 = model.bf_2 && true
+                model.fset.each { 
+                    model."enabled$it" = model."$it" && true
+                }
             }
         }
         //add listeners for target selection
@@ -161,17 +161,20 @@ class VifunController {
                 def v = model.handlers[model.handler]['defaults'].get(key)
                 if (model.qset.contains(key)) {
                     model."${key}" = v[0]
-                }
-                if (model.fmultiple.contains(key)){
+                    t << key + ':' + v[0] + '\n'
+                }else if (model.fmultiple.contains(key)){
                     v.each{ onev ->
                         def index = model."f${key}".size() 
                         model."${key}_$index" = onev
                         model."f${key}"["${key}_$index"]=onev
+                        t << key + ':' + onev + '\n'
                     }
                 }else if (model.fset.contains(key)) {
                     model."${key}" = v[0]
+                    t << key + ':' + v[0] + '\n'
+                }else{
+                    t << key + ':' + v[0] + '\n'
                 }
-                t << key + ':' + v.toString() + '\n'
             }
             //model.handlers[model.handler]['defaults'].each {
                 //if (model.qset.contains(it.key)) {
@@ -334,6 +337,21 @@ class VifunController {
             view.currentParam.toolTipText = "<html>"
             view.foreground = Color.BLACK
             Iterator<String> iterator = params.getParameterNamesIterator();
+            while (iterator.hasNext()) {
+                String key = iterator.next()
+                String[] v = params.getParams(key)
+                v.each{ onev ->
+                    if (model.fset.contains(key) || model.fmultiple.contains(key)){
+                        def orig = model.handlers[model.handler]['defaults'].get(key)
+                        if (!orig.contains(onev)) {
+                            model.currentParam += "+++ "
+                        }
+                        model.currentParam += "${key}:${onev}\n"
+                    }
+                    view.currentParam.toolTipText += "${key}:${onev}<br>"
+                }
+            }
+            //Iterator<String> iterator = params.getParameterNamesIterator();
             //while (iterator.hasNext()) {
                 //String k = iterator.next()
                 //if (model.fset.contains(k)) {
@@ -344,7 +362,6 @@ class VifunController {
                 //}
                 //view.currentParam.toolTipText += "${k}:${params.get(k)}<br>"
             //}
-            model.currentParam = "temp\n"
             view.currentParam.toolTipText += "</html>"
             //make automatic baseline
             if (!tweaking) {

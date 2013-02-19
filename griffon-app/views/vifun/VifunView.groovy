@@ -29,7 +29,7 @@ application(title: 'vifun',
                 label 'Handler', visible: bind{model.enabledHandlerText}
                 comboBox(id:'handlersCombo', visible: bind{model.enabledHandlerText}, actionPerformed: controller.selectHander, selectedItem: bind(target:model, targetProperty:'handler'), constraints: "wrap")
                 //comboBox(id:'handlersCombo', model: eventComboBoxModel(source: model.handlerList), actionPerformed: controller.selectHander, selectedItem: bind(target:model, targetProperty:'handler'), constraints: "wrap")
-                scrollPane (constraints: "growx, growy, width 200:350:400, height 200:350:400, span 5", visible: bind{model.enabledHandlerText}) {
+                scrollPane (constraints: "growx, growy, width 200:350:400, height 100:200:250, span 5", visible: bind{model.enabledHandlerText}) {
                     textArea(text: bind('handlerText', source: model, mutual: true), constraints: "span 8", editable:false)
                 }        
             }
@@ -60,17 +60,20 @@ application(title: 'vifun',
                     ltweak.setFont(new Font("Serif", Font.BOLD, 14))
                     ltweak.setForeground(Color.BLUE)
 
-                    lqf = label 'qf:'
-                    qf = textField name: 'qf', text: bind('qf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
-                    lpf = label 'pf:'
-                    pf = textField name: 'pf', text: bind('pf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
-                    lbf_0 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledBf0}; bf_0 = textField name: "bf_0", text: bind("bf_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledBf0}
-                    lbf_1 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledBf1}; bf_1 = textField name: "bf_1", text: bind("bf_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledBf1}
-                    lbf_2 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledBf2}; bf_2 = textField name: "bf_2", text: bind("bf_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledBf2}
-                    lboost = label 'boost:'
-                    boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
-                    lmm = label 'mm:'
-                    mm = textField name: 'mm', text: bind('mm', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
+                    lqf = label 'qf:', constraints: "hidemode 2", visible: bind{model.enabledqf};
+                    qf = textField name: 'qf', text: bind('qf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledqf};
+                    lpf = label 'pf:', constraints: "hidemode 2", visible: bind{model.enabledpf};
+                    pf = textField name: 'pf', text: bind('pf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledpf};
+                    lbf_0 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledbf_0}; bf_0 = textField name: "bf_0", text: bind("bf_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledbf_0}
+                    lbf_1 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledbf_1}; bf_1 = textField name: "bf_1", text: bind("bf_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledbf_1}
+                    lbf_2 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledbf_2}; bf_2 = textField name: "bf_2", text: bind("bf_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledbf_2}
+                    lbq_0 = label 'bq:', constraints: "hidemode 2", visible: bind{model.enabledbq_0}; bq_0 = textField name: "bq_0", text: bind("bq_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledbq_0}
+                    lbq_1 = label 'bq:', constraints: "hidemode 2", visible: bind{model.enabledbq_1}; bq_1 = textField name: "bq_1", text: bind("bq_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledbq_1}
+                    lbq_2 = label 'bq:', constraints: "hidemode 2", visible: bind{model.enabledbq_2}; bq_2 = textField name: "bq_2", text: bind("bq_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledbq_2}
+                    lboost = label 'boost:', constraints: "hidemode 2", visible: bind{model.enabledboost};
+                    boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledboost};
+                    lmm = label 'mm:', constraints: "hidemode 2", visible: bind{model.enabledmm};
+                    mm = textField name: 'mm', text: bind('mm', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledmm};
                     //ltie = label 'tie:'
                     //tie = textField name: 'tie', text: bind('tie', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
                 sl = slider(id:'sl',constraints: "wrap, span", enabled: bind{model.enabledSlider}, value: bind(target: model, targetProperty:'tweakedFValueNew', validator: {!sl.valueIsAdjusting}))
