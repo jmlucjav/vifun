@@ -64,8 +64,9 @@ application(title: 'vifun',
                     qf = textField name: 'qf', text: bind('qf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
                     lpf = label 'pf:'
                     pf = textField name: 'pf', text: bind('pf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
-                    lbf = label 'bf:'
-                    bf = textField name: 'bf', text: bind('bf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
+                    lbf_0 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledBf0}; bf_0 = textField name: "bf_0", text: bind("bf_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledBf0}
+                    lbf_1 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledBf1}; bf_1 = textField name: "bf_1", text: bind("bf_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledBf1}
+                    lbf_2 = label 'bf:', constraints: "hidemode 2", visible: bind{model.enabledBf2}; bf_2 = textField name: "bf_2", text: bind("bf_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 2", visible: bind{model.enabledBf2}
                     lboost = label 'boost:'
                     boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
                     lmm = label 'mm:'

@@ -1,5 +1,8 @@
 package vifun
 
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.lang.invoke.MethodHandles
 import org.apache.solr.client.solrj.impl.HttpSolrServer
 import org.apache.solr.common.params.*
 import org.apache.solr.client.solrj.*
@@ -8,9 +11,11 @@ import org.apache.solr.common.SolrInputDocument
 import groovy.util.slurpersupport.NodeChild
 import groovy.xml.StreamingMarkupBuilder
 import groovy.text.SimpleTemplateEngine
+import com.google.common.collect.*
 
 class SolrOps {
 
+    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass())
     def server
     String url = "http://localhost:8983/solr/core0"
     //use this instaed of hardcoded "id"
@@ -39,6 +44,7 @@ class SolrOps {
 
     //jm return map with keys: id, pos, score, fields (add more if neccessary)
     def search(params) {
+        //log.info "Search Params: ${params.join('|')}"
         QueryResponse rsp = getServer().query(params);
         def results = []
         int i = 0
@@ -74,14 +80,29 @@ class SolrOps {
         return server
     }
 
-    def defineQueryParams(VifunModel model, Map defp, boolean tweaking){
+    def defineQueryParams(VifunModel model, ListMultimap defp, boolean tweaking){
         ModifiableSolrParams params = new ModifiableSolrParams();
-        defp.each() { key, value ->
-            params.add(key.toString(), value)
+        for (String key : defp.keySet()) {
+            def v = defp.get(key)
+            log.info "$key $v ${model.fset.join('/')}"
+            v.each{ onev ->
+                if (!model.qset.contains(key) && !model.fset.contains(key) && !model.fmultiple.contains(key)){
+                    params.add(key, onev)
+                }
+            }
         }
         model.fset.each{
             if (model."$it"){
-                params.set(it, model."$it");
+                def pval = model."$it" 
+                // if tweaking change selected f
+                if (tweaking && it.equals(model.tweakedFName)){
+                   pval = model.tweakedFFormula.replace(model.tweakedFValue, model.tweakedFValueNew)
+                }
+                if (it.contains('_')){
+                    params.add(it.substring(0,it.indexOf('_')), pval);
+                }else {
+                    params.set(it, pval);
+                }
             }
         }
         model.qset.each{
@@ -101,11 +122,6 @@ class SolrOps {
         // needed by vifun
         params.set("wt", "javabin");
         params.set("debugQuery", "true");
-        // if tweaking change selected f
-        if (tweaking){
-           def newform = model.tweakedFFormula.replace(model.tweakedFValue, model.tweakedFValueNew)
-           params.set(model.tweakedFName, newform);
-        }
         return params
     }
 

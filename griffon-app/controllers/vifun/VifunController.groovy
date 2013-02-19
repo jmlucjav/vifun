@@ -1,16 +1,16 @@
 package vifun
 
-import name.fraser.neil.plaintext.diff_match_patch
 import org.fusesource.jansi.Ansi
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.lang.invoke.MethodHandles
+import com.google.common.collect.*
 
 import javax.swing.JLabel
 import javax.swing.event.CaretEvent
 import javax.swing.event.CaretListener
 import java.awt.Color
 import java.awt.Font
-import java.lang.invoke.MethodHandles
 
 import java.awt.event.ActionEvent
 import java.awt.event.FocusListener
@@ -44,6 +44,9 @@ class VifunController {
                 model.enabledCurrentParam = model.currentMap != null
                 model.enabledBaselineParam = model.baselineMap != null
                 model.enabledErrMsg = model.errMsg && true
+                model.enabledBf0 = model.bf_0 && true
+                model.enabledBf1 = model.bf_1 && true
+                model.enabledBf2 = model.bf_2 && true
             }
         }
         //add listeners for target selection
@@ -149,21 +152,40 @@ class VifunController {
             model.handlerm = model.handlers[model.handler]
             //reset 
             model.fset.each { model."$it" = '' }
+            model.fmultiple.each { model."f$it" = [:] }
             model.rest = ''
             model.qset.each { model."$it" = '' }
             invalidateBaseline()
             def t = new StringBuffer("DEFAULTS---------------------\n")
-            model.handlers[model.handler]['defaults'].each {
-                if (model.qset.contains(it.key)) {
-                    model."${it.key}" = it.value
+            for (String key : model.handlers[model.handler]['defaults'].keySet()) {
+                def v = model.handlers[model.handler]['defaults'].get(key)
+                if (model.qset.contains(key)) {
+                    model."${key}" = v[0]
                 }
-                if (model.fset.contains(it.key)) {
-                    model."${it.key}" = it.value
-                    //add new textfield in view
-                    //view.fpanel.add()
+                if (model.fmultiple.contains(key)){
+                    v.each{ onev ->
+                        def index = model."f${key}".size() 
+                        model."${key}_$index" = onev
+                        model."f${key}"["${key}_$index"]=onev
+                    }
+                }else if (model.fset.contains(key)) {
+                    model."${key}" = v[0]
                 }
-                t << it.key + ':' + it.value + '\n'
+                t << key + ':' + v.toString() + '\n'
             }
+            //model.handlers[model.handler]['defaults'].each {
+                //if (model.qset.contains(it.key)) {
+                    //model."${it.key}" = it.value
+                //}
+                //if (model.fmultiple.contains(it.key)){
+                    //def index = model."f${it.key}".size() 
+                    //model."${it.key}$index" = it.value
+                    //model."f${it.key}".add(it.value)
+                //}else if (model.fset.contains(it.key)) {
+                    //model."${it.key}" = it.value
+                //}
+                //t << it.key + ':' + it.value + '\n'
+            //}
             t << 'APPENDS------------------\n'
             model.handlers[model.handler]['appends'].each {
                 t << it.key + ':' + it.value + '\n'
@@ -190,14 +212,15 @@ class VifunController {
                     def n = (it.@name).toString()
                     def m = model.handlers
                     model.handlers.putAt(n, [:])
-                    model.handlers[n]['defaults'] = [:]
+                    ListMultimap<String, String> amm = ArrayListMultimap.create()
+                    model.handlers[n]['defaults'] = amm
                     model.handlers[n]['appends'] = [:]
-                    //no idea why these f calls dont work, closures work though.
                     addHandlerParams(model.handlers[n], it, 'defaults')
                     addHandlerParams(model.handlers[n], it, 'appends')
                     def p = it.lst.find { it.@name == 'defaults' }.children()
                     p.each { pi ->
-                        model.handlers[n]['defaults'][(pi.@name).toString()] = pi.text()
+                        //model.handlers[n]['defaults'][(pi.@name).toString()] = pi.text()
+                        model.handlers[n]['defaults'].put((pi.@name).toString(), pi.text())
                     }
                     p = it.lst.find { it.@name == 'appends' }.children()
                     p.each { pi ->
@@ -272,12 +295,12 @@ class VifunController {
             doLater{
                 def errstr ="Error: ${e.getMessage()}"
                 //showError(errstr)
-        log.error errstr
-        model.errMsg = errstr
-        view.errMsgP.invalidate()
-        view.panel.validate()
-        javax.swing.SwingUtilities.getRoot(view.panel).pack()
-        view.panel.repaint()
+                log.error errstr
+                model.errMsg = errstr
+                view.errMsgP.invalidate()
+                view.panel.validate()
+                javax.swing.SwingUtilities.getRoot(view.panel).pack()
+                view.panel.repaint()
             }
         }
         doLater {
@@ -311,16 +334,17 @@ class VifunController {
             view.currentParam.toolTipText = "<html>"
             view.foreground = Color.BLACK
             Iterator<String> iterator = params.getParameterNamesIterator();
-            while (iterator.hasNext()) {
-                String k = iterator.next()
-                if (model.fset.contains(k)) {
-                    if (!params.get(k).equals(model.handlers[model.handler]['defaults'][k])) {
-                        model.currentParam += "+++ "
-                    }
-                    model.currentParam += "${k}:${params.get(k)}\n"
-                }
-                view.currentParam.toolTipText += "${k}:${params.get(k)}<br>"
-            }
+            //while (iterator.hasNext()) {
+                //String k = iterator.next()
+                //if (model.fset.contains(k)) {
+                    //if (!params.get(k).equals(model.handlers[model.handler]['defaults'][k])) {
+                        //model.currentParam += "+++ "
+                    //}
+                    //model.currentParam += "${k}:${params.get(k)}\n"
+                //}
+                //view.currentParam.toolTipText += "${k}:${params.get(k)}<br>"
+            //}
+            model.currentParam = "temp\n"
             view.currentParam.toolTipText += "</html>"
             //make automatic baseline
             if (!tweaking) {

@@ -52,6 +52,9 @@ class VifunModel {
     @Bindable boolean enabledCurrentParam
     @Bindable boolean enabledBaselineParam
     @Bindable boolean enabledErrMsg
+    @Bindable boolean enabledBf0
+    @Bindable boolean enabledBf1
+    @Bindable boolean enabledBf2
 
     //params
     @Bindable String q = 'm'
@@ -61,12 +64,22 @@ class VifunModel {
     @Bindable String rest
     //edismax score related vars
     @Bindable String qf
-    @Bindable String bf
     @Bindable String pf
     @Bindable String boost
     @Bindable String mm
+    //several 
+    @Bindable String bf_0
+    @Bindable String bf_1
+    @Bindable String bf_2
+    //@Bindable String bq_1
+    //@Bindable String bq_2
+    //@Bindable String bq_3
     //@Bindable String tie
-    List<String> fset = ['qf','pf', 'bf', 'boost', 'mm']
+    List<String> fset = ['qf','pf', 'boost', 'mm', 'bf_1', 'bf_2', 'bf_0']
+    List<String> fmultiple = ['bf', 'bq']
+    //associate each bf to bf1...
+    Map fbf = [:]
+    Map fbq = [:]
 
     //change selected bf...
     @Bindable String tweakedFName
