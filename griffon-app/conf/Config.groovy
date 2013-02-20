@@ -5,11 +5,13 @@ log4j = {
         console name: 'stdout', layout: pattern(conversionPattern: '%d [%t] %-5p %c - %m%n')
     }
 
+    error  'org.apache.http'
     error  'org.codehaus.griffon'
 
     info   'griffon.util',
            'griffon.core',
            'griffon.swing',
            'griffon.app'
-}
 
+    debug   'org.apache.http.impl.conn.DefaultClientConnection'
+}

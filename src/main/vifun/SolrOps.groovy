@@ -83,7 +83,6 @@ class SolrOps {
         ModifiableSolrParams params = new ModifiableSolrParams();
         for (String key : defp.keySet()) {
             def v = defp.get(key)
-            log.debug "$key $v ${model.fset.join('/')}"
             v.each{ onev ->
                 if (!model.qset.contains(key) && !model.fset.contains(key) && !model.fmultiple.contains(key)){
                     params.add(key, onev)
@@ -96,7 +95,6 @@ class SolrOps {
                 // if tweaking change selected f
                 if (tweaking && it.equals(model.tweakedFName)){
                     //take care just to replace the selected instance of that string!
-                    //pval = model.tweakedFFormula.replace(model.tweakedFValue, model.tweakedFValueNew)
                     pval = model.tweakedFFormula.substring(0, model.tweakedFValuePos) + model.tweakedFFormula.substring(model.tweakedFValuePos).replaceFirst(model.tweakedFValue, model.tweakedFValueNew)
                 }
                 if (it.contains('_')){
