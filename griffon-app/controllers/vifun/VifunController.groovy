@@ -322,7 +322,8 @@ class VifunController {
                     //find how the doc did in baseline
                     def bd = model.baselineMap.find { it.id == d.id }
                     bdpos = bd ? bd.pos.toInteger() - d.pos.toInteger() : '+'
-                    bdscore = bd ? d.score.toFloat() - bd.score.toFloat() : '+'
+                    //format it to make sorted col easier to read
+                    bdscore = bd ? String.format("%.5f", d.score.toFloat() - bd.score.toFloat()) : '+'
                     def absdscore = bd ? Math.abs(d.score.toFloat()-bd.score.toFloat()) : 0
                     model.maxScoreDiff = Math.max(model.maxScoreDiff,absdscore)
                     line += "${d.pos}($bdpos) ${fstring}: ${d.score}($bdscore)\n"

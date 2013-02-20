@@ -105,6 +105,9 @@ class VifunModel {
     def deltaPosComparator = {a,b -> return deltaCompare(a.posdelta, b.posdelta)}as Comparator
     def deltaScoreComparator = {a,b -> return deltaCompare(a.scoredelta, b.scoredelta)}as Comparator
     int deltaCompare (String a, String b){
+        if ('+'.equals(a) || '+'.equals(b)) {
+            log.debug 'one +'
+        }
         if (!a && !b) return 0
         if (!a) return -1
         if (!b) return 1
