@@ -1,8 +1,7 @@
 package vifun
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodHandles;
+import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.impl.HttpSolrServer
 import org.apache.solr.common.params.*
 import org.apache.solr.client.solrj.*
@@ -15,7 +14,7 @@ import com.google.common.collect.*
 
 class SolrOps {
 
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass())
+    private static final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass())
     def server
     String url = "http://localhost:8983/solr/core0"
     //use this instaed of hardcoded "id"
@@ -84,7 +83,7 @@ class SolrOps {
         ModifiableSolrParams params = new ModifiableSolrParams();
         for (String key : defp.keySet()) {
             def v = defp.get(key)
-            log.info "$key $v ${model.fset.join('/')}"
+            log.debug "$key $v ${model.fset.join('/')}"
             v.each{ onev ->
                 if (!model.qset.contains(key) && !model.fset.contains(key) && !model.fmultiple.contains(key)){
                     params.add(key, onev)

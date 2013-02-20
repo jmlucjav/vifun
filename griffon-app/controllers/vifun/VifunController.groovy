@@ -1,9 +1,7 @@
 package vifun
 
-import org.fusesource.jansi.Ansi
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodHandles;
+import org.apache.log4j.Logger;
 import com.google.common.collect.*
 
 import javax.swing.JLabel
@@ -20,7 +18,7 @@ class VifunController {
     // these will be injected by Griffon
     def model
     def view
-    private static final Logger log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass())
+    private static final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass())
 
     GroovyShell shell = new GroovyShell()
 
