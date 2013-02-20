@@ -95,7 +95,9 @@ class SolrOps {
                 def pval = model."$it" 
                 // if tweaking change selected f
                 if (tweaking && it.equals(model.tweakedFName)){
-                   pval = model.tweakedFFormula.replace(model.tweakedFValue, model.tweakedFValueNew)
+                    //take care just to replace the selected instance of that string!
+                    //pval = model.tweakedFFormula.replace(model.tweakedFValue, model.tweakedFValueNew)
+                    pval = model.tweakedFFormula.substring(0, model.tweakedFValuePos) + model.tweakedFFormula.substring(model.tweakedFValuePos).replaceFirst(model.tweakedFValue, model.tweakedFValueNew)
                 }
                 if (it.contains('_')){
                     params.add(it.substring(0,it.indexOf('_')), pval);

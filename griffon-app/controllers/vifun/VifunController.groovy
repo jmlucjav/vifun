@@ -62,19 +62,20 @@ class VifunController {
                         if (!sel.isNumber()) return
                         if (mark > 0 && text[mark - 1].isNumber()) return
                         if (dot < text.size() && text[dot].isNumber()) return
-                        selectTarget(arg0.source.name, arg0.source.text, sel.trim(), arg0.source)
+                        selectTarget(arg0.source.name, arg0.source.text, sel.trim(), arg0.source, mark)
                     }
                 }
             });
         }
     }
 
-    def selectTarget(String fname, String ftext, String fsel, source) {
+    def selectTarget(String fname, String ftext, String fsel, source, mark) {
         edt {
             if (!model.enabledBind) return
             model.tweakedFName = fname
             model.tweakedFFormula = ftext
             model.tweakedFValue = fsel
+            model.tweakedFValuePos = mark
             source.setSelectionColor(Color.GREEN)
 //            resetFFieldsLabels()
             model.fset.each { view."l$it".foreground = Color.BLACK }

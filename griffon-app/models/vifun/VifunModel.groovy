@@ -96,6 +96,8 @@ class VifunModel {
     @Bindable String tweakedFName
     @Bindable String tweakedFFormula
     @Bindable String tweakedFValue
+    //we store the pos to just replace that value
+    @Bindable int tweakedFValuePos
     @Bindable String tweakedFValueNew
 
     float maxScoreDiff
