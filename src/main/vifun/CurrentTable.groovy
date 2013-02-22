@@ -71,14 +71,14 @@ public class CurrentTable extends JTable {
         //get id
         String id = vmodel.currentMap[rowIndex].id
         switch (colRow){
-            case [0, 3]:
+            case [0, 1]:
                 //get doc in baseline
                 def curdoc = vmodel.baselineMap.find { it.id == id }
                 if (curdoc) {
                     tip = "Baseline: Pos: ${curdoc.pos} Score:${curdoc.score}"
                 }
                 break
-            case [1,4]:
+            case [3,4]:
                 def curdoc = vmodel.currentMap.find { it.id == id }
                 if (curdoc) {
                     tip = "${curdoc.explain}"

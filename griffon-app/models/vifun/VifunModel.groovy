@@ -65,7 +65,7 @@ class VifunModel {
     @Bindable boolean enabledbq_2
 
     //params
-    @Bindable String q = 'm'
+    @Bindable String q
     @Bindable String rows
     @Bindable String fl
     List<String> qset = ['q','rows', 'fl']
@@ -82,15 +82,14 @@ class VifunModel {
     @Bindable String bq_0
     @Bindable String bq_1
     @Bindable String bq_2
-    //@Bindable String bq_1
-    //@Bindable String bq_2
-    //@Bindable String bq_3
     //@Bindable String tie
     List<String> fset = ['qf','pf', 'boost', 'mm', 'bf_1', 'bf_2', 'bf_0', 'bq_1', 'bq_2', 'bq_0']
     List<String> fmultiple = ['bf', 'bq']
     //associate each bf to bf1...
     Map fbf = [:]
     Map fbq = [:]
+    //ignore params
+    List<String> fignore = ['facet', 'spellcheck', 'mlt', 'hl', 'v', 'title', 'echoParams']
 
     //change selected bf...
     @Bindable String tweakedFName

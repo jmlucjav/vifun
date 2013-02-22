@@ -9,10 +9,11 @@ import java.awt.event.FocusEvent;
 import ca.odell.glazedlists.swing.*
 import ca.odell.glazedlists.gui.*
 import ca.odell.glazedlists.*
+import javax.swing.JTable
 
 
 application(title: 'vifun',
-  preferredSize: [1480, 900],
+  preferredSize: [1300, 900],
   pack: true,
   locationByPlatform:true,
   iconImage: imageIcon('/griffon-icon-48x48.png').image,
@@ -88,9 +89,9 @@ application(title: 'vifun',
         }
         panel(border:lineBorder(color:Color.BLACK), name:'resPanel', layout:new MigLayout('fill'), constraints: "east, growx, growy, width 500:1200:1600, gapy 0:0:0, gapx 0:0:0") {
             //button ("Save Baseline", constraints: "south, width 150:150:150", enabled: bind{model.enabledTake}, actionPerformed: controller.takeBaselineSnapshot)
-            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:740:1050") {
+            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:640:950") {
                 label 'Current Result'
-                scrollPane (constraints: "growx, growy") {
+                scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
                     ctable = table( new CurrentTable(), id: 'ctable') {
                         tableFormat = defaultTableFormat(columns: model.columns)
                         eventTableModel(source: model.ctable, format: tableFormat)
@@ -116,14 +117,24 @@ application(title: 'vifun',
                 }
                 baselineParam = textArea(text: bind('baselineParam', source: model, mutual: true),constraints: "growx", visible: bind{model.enabledBaselineParam}, editable:false)
             }
-            ctable.columnModel.getColumn(0).setPreferredWidth(20)
-            ctable.columnModel.getColumn(1).setPreferredWidth(20)
+            ctable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS)
+            ctable.columnModel.getColumn(0).setPreferredWidth(40)
+            ctable.columnModel.getColumn(0).setMaxWidth(40)
+            ctable.columnModel.getColumn(1).setPreferredWidth(60)
+            ctable.columnModel.getColumn(1).setMaxWidth(60)
             ctable.columnModel.getColumn(2).setPreferredWidth(280)
+            ctable.columnModel.getColumn(2).setMaxWidth(300)
             ctable.columnModel.getColumn(3).setPreferredWidth(60)
+            ctable.columnModel.getColumn(3).setMaxWidth(60)
             ctable.columnModel.getColumn(4).setPreferredWidth(60)
-            btable.columnModel.getColumn(0).setPreferredWidth(20)
-            btable.columnModel.getColumn(1).setPreferredWidth(280)
+            ctable.columnModel.getColumn(4).setMaxWidth(60)
+            btable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS)
+            btable.columnModel.getColumn(0).setPreferredWidth(40)
+            btable.columnModel.getColumn(0).setMaxWidth(40)
+            btable.columnModel.getColumn(1).setPreferredWidth(200)
+            btable.columnModel.getColumn(1).setMaxWidth(300)
             btable.columnModel.getColumn(2).setPreferredWidth(60)
+            btable.columnModel.getColumn(2).setMaxWidth(60)
         }
     }
 }

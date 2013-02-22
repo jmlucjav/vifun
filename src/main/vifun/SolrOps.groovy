@@ -85,7 +85,10 @@ class SolrOps {
             def v = defp.get(key)
             v.each{ onev ->
                 if (!model.qset.contains(key) && !model.fset.contains(key) && !model.fmultiple.contains(key)){
-                    params.add(key, onev)
+                    //skip facet, spellcheck, mlt, hl they are useless and slow thigns down
+                    if (model.fignore.intersect(key.tokenize('.')).isEmpty()){
+                        params.add(key, onev)
+                    }
                 }
             }
         }

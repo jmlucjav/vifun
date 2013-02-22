@@ -107,11 +107,6 @@ class VifunController {
             }
             view.sl.value = selasint
             view.sl.setLabelTable(setSliderLabels());
-            //Hashtable labelTable = new Hashtable();
-            //labelTable.put( new Integer( 0 ), new JLabel("0") );
-            //labelTable.put( new Integer(view.sl.minimum), new JLabel(view.sl.minimum as String) );
-            //labelTable.put( new Integer(view.sl.maximum), new JLabel(view.sl.maximum as String) );
-            //view.sl.setLabelTable(labelTable);
             view.sl.setPaintLabels(true);
         }
     }
@@ -131,11 +126,6 @@ class VifunController {
             view.sl.maximum *= 10
             view.sl.majorTickSpacing = (view.sl.maximum - view.sl.minimum) / 2
             view.sl.setLabelTable(setSliderLabels());
-            //Hashtable labelTable = new Hashtable();
-            //labelTable.put( new Integer( 0 ), new JLabel("0") );
-            //labelTable.put( new Integer(view.sl.minimum), new JLabel(view.sl.minimum as String) );
-            //labelTable.put( new Integer(view.sl.maximum), new JLabel(view.sl.maximum as String) );
-            //view.sl.setLabelTable(labelTable);
             view.sl.setPaintLabels(true);
         }
     }
@@ -155,46 +145,58 @@ class VifunController {
             model.rest = ''
             model.qset.each { model."$it" = '' }
             invalidateBaseline()
-            def t = new StringBuffer("DEFAULTS---------------------\n")
-            for (String key : model.handlers[model.handler]['defaults'].keySet()) {
-                def v = model.handlers[model.handler]['defaults'].get(key)
-                if (model.qset.contains(key)) {
-                    model."${key}" = v[0]
-                    t << key + ':' + v[0] + '\n'
-                }else if (model.fmultiple.contains(key)){
-                    v.each{ onev ->
-                        def index = model."f${key}".size() 
-                        model."${key}_$index" = onev
-                        model."f${key}"["${key}_$index"]=onev
-                        t << key + ':' + onev + '\n'
+            def t = new StringBuffer()
+            ['defaults', 'appends', 'invariants'].each{
+                t << "${it.toUpperCase()}---------------------\n"
+                for (String key : model.handlers[model.handler][it].keySet()) {
+                    def v = model.handlers[model.handler][it].get(key)
+                    if (model.qset.contains(key)) {
+                        model."${key}" = v[0]
+                        t << key + ':' + v[0] + '\n'
+                    }else if (model.fmultiple.contains(key)){
+                        v.each{ onev ->
+                            def index = model."f${key}".size() 
+                            model."${key}_$index" = onev
+                            model."f${key}"["${key}_$index"]=onev
+                            t << key + ':' + onev + '\n'
+                        }
+                    }else if (model.fset.contains(key)) {
+                        model."${key}" = v[0]
+                        t << key + ':' + v[0] + '\n'
+                    }else{
+                        t << key + ':' + v[0] + '\n'
                     }
-                }else if (model.fset.contains(key)) {
-                    model."${key}" = v[0]
-                    t << key + ':' + v[0] + '\n'
-                }else{
-                    t << key + ':' + v[0] + '\n'
                 }
             }
-            //model.handlers[model.handler]['defaults'].each {
-                //if (model.qset.contains(it.key)) {
-                    //model."${it.key}" = it.value
-                //}
-                //if (model.fmultiple.contains(it.key)){
-                    //def index = model."f${it.key}".size() 
-                    //model."${it.key}$index" = it.value
-                    //model."f${it.key}".add(it.value)
-                //}else if (model.fset.contains(it.key)) {
-                    //model."${it.key}" = it.value
-                //}
-                //t << it.key + ':' + it.value + '\n'
-            //}
-            t << 'APPENDS------------------\n'
-            model.handlers[model.handler]['appends'].each {
-                t << it.key + ':' + it.value + '\n'
-            }
+            //this does not work well, not all is displyed in the UI, not sure why
+            //parseParams('defaults', t)
+            //parseParams('appends', t)
+            //parseParams('invariants', t)
             model.handlerText = t.toString()
         }
     }
+    //def parseParams(String type, StringBuffer sb){
+        //sb << "${type.toUpperCase()}---------------------\n"
+        //for (String key : model.handlers[model.handler][type].keySet()) {
+            //def v = model.handlers[model.handler][type].get(key)
+            //if (model.qset.contains(key)) {
+                //model."${key}" = v[0]
+                //sb << key + ':' + v[0] + '\n'
+            //}else if (model.fmultiple.contains(key)){
+                //v.each{ onev ->
+                    //def index = model."f${key}".size() 
+                    //model."${key}_$index" = onev
+                    //model."f${key}"["${key}_$index"]=onev
+                    //sb << key + ':' + onev + '\n'
+                //}
+            //}else if (model.fset.contains(key)) {
+                //model."${key}" = v[0]
+                //sb << key + ':' + v[0] + '\n'
+            //}else{
+                //sb << key + ':' + v[0] + '\n'
+            //}
+        //}
+    //}
 
     //this should operate on model.handlerList, not view.handlersCombo
     def showHandlers = { evt = null ->
@@ -215,18 +217,15 @@ class VifunController {
                     def m = model.handlers
                     model.handlers.putAt(n, [:])
                     ListMultimap<String, String> amm = ArrayListMultimap.create()
-                    model.handlers[n]['defaults'] = amm
-                    model.handlers[n]['appends'] = [:]
-                    addHandlerParams(model.handlers[n], it, 'defaults')
-                    addHandlerParams(model.handlers[n], it, 'appends')
-                    def p = it.lst.find { it.@name == 'defaults' }.children()
-                    p.each { pi ->
-                        //model.handlers[n]['defaults'][(pi.@name).toString()] = pi.text()
-                        model.handlers[n]['defaults'].put((pi.@name).toString(), pi.text())
-                    }
-                    p = it.lst.find { it.@name == 'appends' }.children()
-                    p.each { pi ->
-                        model.handlers[n]['appends'][(pi.@name).toString()] = pi.text()
+                    model.handlers[n]['all'] = amm
+                    ['defaults', 'appends', 'invariants'].each{ pt ->
+                        ListMultimap<String, String> dmm = ArrayListMultimap.create()
+                        model.handlers[n][pt] = dmm
+                        def p = it.lst.find { it.@name == pt }.children()
+                        p.each { pi ->
+                            model.handlers[n][pt].put((pi.@name).toString().replaceAll("\\s+", " ").trim(), pi.text().replaceAll("\\s+", " ").trim())
+                        }
+                        model.handlers[n]['all'].putAll(model.handlers[n][pt])
                     }
                 }
             }catch(Throwable e){
@@ -269,29 +268,13 @@ class VifunController {
         model."${model.tweakedFName}" = model.tweakedFFormula.replace(model.tweakedFValue, model.tweakedFValueNew)
     }
 
-    def addHandlerParams(Map handl, it, String key) {
-        if (!it) return
-        def p = it.lst.find { it.@name == key }.children()
-        p.each { pi ->
-            log.debug "\t${pi.@name}: ${pi.text()}"
-            handl[key][(pi.@name).toString] = pi.text()
-        }
-    }
-
     def runQuery(boolean tweaking) {
-        //model.errMsg = ''
-        //clearError()
-                    //model.errMsg = ''
-                    //view.errMsgP.invalidate()
-                    //view.panel.validate()
-                    //javax.swing.SwingUtilities.getRoot(view.panel).pack()
-                    //view.panel.repaint()
         model.maxScoreDiff = 0
         //build params and search
         def params
         def result
         try {
-            params = model.solr.defineQueryParams(model, model.handlerm['defaults'], tweaking)
+            params = model.solr.defineQueryParams(model, model.handlerm['all'], tweaking)
             result = model.solr.search(params)
         }catch(Exception e){
             doLater{
@@ -342,7 +325,7 @@ class VifunController {
                 String[] v = params.getParams(key)
                 v.each{ onev ->
                     if (model.fset.contains(key) || model.fmultiple.contains(key)){
-                        def orig = model.handlers[model.handler]['defaults'].get(key)
+                        def orig = model.handlers[model.handler]['all'].get(key)
                         if (!orig.contains(onev)) {
                             model.currentParam += "+++ "
                         }
@@ -351,17 +334,6 @@ class VifunController {
                     view.currentParam.toolTipText += "${key}:${onev}<br>"
                 }
             }
-            //Iterator<String> iterator = params.getParameterNamesIterator();
-            //while (iterator.hasNext()) {
-                //String k = iterator.next()
-                //if (model.fset.contains(k)) {
-                    //if (!params.get(k).equals(model.handlers[model.handler]['defaults'][k])) {
-                        //model.currentParam += "+++ "
-                    //}
-                    //model.currentParam += "${k}:${params.get(k)}\n"
-                //}
-                //view.currentParam.toolTipText += "${k}:${params.get(k)}<br>"
-            //}
             view.currentParam.toolTipText += "</html>"
             //make automatic baseline
             if (!tweaking) {
