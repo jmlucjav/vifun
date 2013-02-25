@@ -67,7 +67,7 @@ table, you can see current position/score and also delta relative to the baselin
 ### If you want to run from source (griffon1.1.0 required):
 
 - Clone the project
-- `cd griffon-app`
+- `cd vifun`
 - `griffon run-app`
 - point to your Solr instance and proceed as above
 
