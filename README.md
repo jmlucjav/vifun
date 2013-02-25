@@ -41,6 +41,7 @@ Getting started
 -------------------
 
 ### [Click here to download latest version](http://code.google.com/p/vifun/downloads/detail?name=vifun-0.4.zip) and unzip
+- `chmod +x bin/vifun` if on linux/OSX
 - Run `vifun-0.4\bin\vifun.bat` or `vifun-04\bin\vifun` if on linux/OSX 
 - Edit **Solr URL** to match yours (in Sol4.1 default is http://localhost:8983/solr/collection1 for example)
 ![hander selection](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-handlers.jpg)
