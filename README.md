@@ -23,7 +23,7 @@ handler. If you are fed up of: change a number a bit, restart Solr, run the same
 Features
 ------------
 
-- Can tweak numeric values in the following params: **qf, pf, bf, bq, boost, mm** (others can be easily added) even in **&lt;appends&gt; or &lt;invariants&gt;**
+- Can tweak numeric values in the following params: **qf, pf, pf2, pf3, ps, ps2, ps3, bf, bq, boost, mm** (others can be easily added) even in **&lt;appends&gt; or &lt;invariants&gt;**
 - View side by side a Baseline query result and how it changes when you gradually change each value in the params
 - Colorized values, color depends on how the document does related to baseline query
 - Tooltips give you Explain info 
@@ -35,36 +35,36 @@ Requirements
 -------------------
 
 - **/select** handler should be available, and not have any **&lt;appends&gt; or &lt;invariants&gt;**, as it could interfere with how vifun works.
-- **Java7** is needed (I will upload a new version that run on JDK1.6 shortly). A JRE should be enough.
+- **jdk1.6** is needed (maybe it runs on jdk1.5 too, but I didn't test). A JRE should be enough.
 
 Getting started
 -------------------
 
-### [Click here to download latest version](http://code.google.com/p/vifun/downloads/detail?name=vifun-0.4.zip) and unzip
-- `chmod +x bin/vifun` if on linux/OSX
-- Run `vifun-0.4\bin\vifun.bat` or `vifun-04\bin\vifun` if on linux/OSX 
+### [Click here to download latest version](http://code.google.com/p/vifun/downloads/detail?name=vifun-0.5.zip) and unzip
+-`chmod +x bin/vifun` if on linux/OSX
+- Run `bin\vifun.bat` or `bin/vifun` if on linux/OSX 
 - Edit **Solr URL** to match yours (in Sol4.1 default is http://localhost:8983/solr/collection1 for example)
 ![hander selection](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-handlers.jpg)
 - **Show Handerls**, and select the handler you wish to tweak from **Handerls** dropdown. The text area below shows the parameters of the handler.
 - Modify the values to run a baseline query:
     - **q**: query string you want to use
-    - **rows**: as in Solr, don't choose a number too small, so you can see more documents, I typically use 500
+    - **rows**: as in Solr, don't choose a number too small, so you can see more documents, I typically use 200/400
     - **fl**: comma separated list of fields you want to show for each doc, keep it short (other fields needed will be added, like the id, score) 
     - **rest**: in case you need to add more params, for example: sfield, fq etc)
 ![query params](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-qparams.jpg)
 - **Run Query**. The two panels on the right will show the same result, sorted by score. 
 ![results](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-results.jpg)
-- Use the mouse to select the number you want to tweak in Score params (select all the digits). Note the label of the field is highlighted with current value.
+- Use the mouse to select the number you want to tweak in Score params (select all the digits). Note the label of the field is highlighted with current value. Notice that you can also manually edit the param contents.
 ![target selection](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-selecttarget.jpg)
 - Move the slider, release and see how a new query is run, and you can compare how result changes with the current value. In the Current
-table, you can see current position/score and also delta relative to the baseline. The colour of the row reflects how much the doc gained/lost. 
+table, you can see current position/score and also delta relative to the baseline. The colour of the row reflects how much the doc gained/lost. A + means the maximum gain (the doc was not in Baseline).
 ![tweaking a value](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-baseline.jpg)
 - You can increase the limits of the slider, and if you are satisfied with a value, set it, so it will be set to current value. 
 - Tweak another number...
 - Tooltips exist in Current (Explain info) and Baseline (pos/score of that doc in Current, and Explain in Score column)
 
 
-### If you want to run from source (griffon1.1.0 required):
+### If you want to run from source (griffon1.1.0 required, make sure griffon is in your path etc):
 
 - Clone the project
 - `cd vifun`

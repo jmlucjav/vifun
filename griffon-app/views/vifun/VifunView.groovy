@@ -56,27 +56,30 @@ application(title: 'vifun',
             //boost values
             //panel(border:lineBorder(color:Color.BLACK),name:'boostPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
             fpanel = panel(name:'boostPanel', layout:new MigLayout('fill'), constraints: "span, wrap") {
-                    label 'Scoring:'
-                    ltweak = label 'Select a number as target to tweak', visible: bind{model.enabledBind}, constraints: "wrap, span 3"
-                    ltweak.setFont(new Font("Serif", Font.BOLD, 14))
-                    ltweak.setForeground(Color.BLUE)
+                label 'Scoring:'
+                ltweak = label 'Select a number as target to tweak', visible: bind{model.enabledBind}, constraints: "wrap, span 3"
+                ltweak.setFont(new Font("Serif", Font.BOLD, 14))
+                ltweak.setForeground(Color.BLUE)
 
-                    lqf = label 'qf:', constraints: "hidemode 3", visible: bind{model.enabledqf};
-                    qf = textField name: 'qf', text: bind('qf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledqf};
-                    lpf = label 'pf:', constraints: "hidemode 3", visible: bind{model.enabledpf};
-                    pf = textField name: 'pf', text: bind('pf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledpf};
-                    lbf_0 = label 'bf:', constraints: "hidemode 3", visible: bind{model.enabledbf_0}; bf_0 = textField name: "bf_0", text: bind("bf_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbf_0}
-                    lbf_1 = label 'bf:', constraints: "hidemode 3", visible: bind{model.enabledbf_1}; bf_1 = textField name: "bf_1", text: bind("bf_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbf_1}
-                    lbf_2 = label 'bf:', constraints: "hidemode 3", visible: bind{model.enabledbf_2}; bf_2 = textField name: "bf_2", text: bind("bf_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbf_2}
-                    lbq_0 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_0}; bq_0 = textField name: "bq_0", text: bind("bq_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_0}
-                    lbq_1 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_1}; bq_1 = textField name: "bq_1", text: bind("bq_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_1}
-                    lbq_2 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_2}; bq_2 = textField name: "bq_2", text: bind("bq_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_2}
-                    lboost = label 'boost:', constraints: "hidemode 3", visible: bind{model.enabledboost};
-                    boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledboost};
-                    lmm = label 'mm:', constraints: "hidemode 3", visible: bind{model.enabledmm};
-                    mm = textField name: 'mm', text: bind('mm', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledmm};
-                    //ltie = label 'tie:'
-                    //tie = textField name: 'tie', text: bind('tie', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
+                lqf = label 'qf:', constraints: "hidemode 3", visible: bind{model.enabledqf}; qf = textField name: 'qf', text: bind('qf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledqf};
+                lpf = label 'pf:', constraints: "hidemode 3", visible: bind{model.enabledpf}; pf = textField name: 'pf', text: bind('pf', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledpf};
+                lpf2 = label 'pf2:', constraints: "hidemode 3", visible: bind{model.enabledpf2}; pf2 = textField name: 'pf2', text: bind('pf2', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledpf2};
+                lpf3 = label 'pf3:', constraints: "hidemode 3", visible: bind{model.enabledpf3}; pf3 = textField name: 'pf3', text: bind('pf3', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledpf3};
+                lps = label 'ps:', constraints: "hidemode 3", visible: bind{model.enabledps}; ps = textField name: 'ps', text: bind('ps', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledps};
+                lps2 = label 'ps2:', constraints: "hidemode 3", visible: bind{model.enabledps2}; ps2 = textField name: 'ps2', text: bind('ps2', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledps2};
+                lps3 = label 'ps3:', constraints: "hidemode 3", visible: bind{model.enabledps3}; ps3 = textField name: 'ps3', text: bind('ps3', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledps3};
+                lbf_0 = label 'bf:', constraints: "hidemode 3", visible: bind{model.enabledbf_0}; bf_0 = textField name: "bf_0", text: bind("bf_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbf_0}
+                lbf_1 = label 'bf:', constraints: "hidemode 3", visible: bind{model.enabledbf_1}; bf_1 = textField name: "bf_1", text: bind("bf_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbf_1}
+                lbf_2 = label 'bf:', constraints: "hidemode 3", visible: bind{model.enabledbf_2}; bf_2 = textField name: "bf_2", text: bind("bf_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbf_2}
+                lbq_0 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_0}; bq_0 = textField name: "bq_0", text: bind("bq_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_0}
+                lbq_1 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_1}; bq_1 = textField name: "bq_1", text: bind("bq_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_1}
+                lbq_2 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_2}; bq_2 = textField name: "bq_2", text: bind("bq_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_2}
+                lboost = label 'boost:', constraints: "hidemode 3", visible: bind{model.enabledboost};
+                boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledboost};
+                lmm = label 'mm:', constraints: "hidemode 3", visible: bind{model.enabledmm};
+                mm = textField name: 'mm', text: bind('mm', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledmm};
+                //ltie = label 'tie:'
+                //tie = textField name: 'tie', text: bind('tie', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
                 sl = slider(id:'sl',constraints: "wrap, span", enabled: bind{model.enabledSlider}, value: bind(target: model, targetProperty:'tweakedFValueNew', validator: {!sl.valueIsAdjusting}))
                 sl.setPaintTicks(true)
                 sl.setPaintLabels(true)
@@ -84,7 +87,6 @@ application(title: 'vifun',
                 label(text:bind(source:sl, sourceProperty:'value'), visible: bind{model.enabledSlider}, border:lineBorder(color:Color.GREEN))
                 button ("Set current value", enabled: bind{model.enabledSlider},name: 'setValueSlider', actionPerformed: controller.setValue, constraints: "left") 
                 button ("Increase limits", enabled: bind{model.enabledSlider},name: 'largerSlider', actionPerformed: controller.largerSlider, constraints: "left") 
-
             }
         }
         panel(border:lineBorder(color:Color.BLACK), name:'resPanel', layout:new MigLayout('fill'), constraints: "east, growx, growy, width 500:1200:1600, gapy 0:0:0, gapx 0:0:0") {

@@ -15,3 +15,6 @@ log4j = {
 
     debug   'org.apache.http.impl.conn.DefaultClientConnection'
 }
+
+//multliplier to ask for nb rows for baseline
+vifun.baseline.rows.multiplier = 5

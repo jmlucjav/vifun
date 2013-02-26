@@ -1,20 +1,14 @@
 package vifun
 
-import java.lang.invoke.MethodHandles;
-import org.apache.log4j.Logger;
+import org.slf4j.*
 import org.apache.solr.client.solrj.impl.HttpSolrServer
 import org.apache.solr.common.params.*
-import org.apache.solr.client.solrj.*
 import org.apache.solr.client.solrj.response.*
-import org.apache.solr.common.SolrInputDocument
-import groovy.util.slurpersupport.NodeChild
-import groovy.xml.StreamingMarkupBuilder
-import groovy.text.SimpleTemplateEngine
 import com.google.common.collect.*
 
 class SolrOps {
+    private static final Logger log = LoggerFactory.getLogger(SolrOps)
 
-    private static final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass())
     def server
     String url = "http://localhost:8983/solr/core0"
     //use this instaed of hardcoded "id"
@@ -108,7 +102,15 @@ class SolrOps {
             }
         }
         model.qset.each{
-            if (model."$it"){
+            if ("rows".equals(it)){
+                if (tweaking){
+                    params.set(it, model."$it");
+                }else{
+                    //overask rows
+                    int nbrows = griffon.util.ApplicationHolder.application.config.vifun.baseline.rows.multiplier * (model."$it" as Integer)
+                    params.set(it, nbrows);
+                }
+            }else if (model."$it"){
                 params.set(it, model."$it");
             }
         }

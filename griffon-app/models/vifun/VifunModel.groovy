@@ -55,6 +55,11 @@ class VifunModel {
     //scoring stuff
     @Bindable boolean enabledqf
     @Bindable boolean enabledpf
+    @Bindable boolean enabledpf2
+    @Bindable boolean enabledpf3
+    @Bindable boolean enabledps
+    @Bindable boolean enabledps2
+    @Bindable boolean enabledps3
     @Bindable boolean enabledboost
     @Bindable boolean enabledmm
     @Bindable boolean enabledbf_0
@@ -73,6 +78,11 @@ class VifunModel {
     //edismax score related vars
     @Bindable String qf
     @Bindable String pf
+    @Bindable String pf2
+    @Bindable String pf3
+    @Bindable String ps
+    @Bindable String ps2
+    @Bindable String ps3
     @Bindable String boost
     @Bindable String mm
     //several 
@@ -83,7 +93,7 @@ class VifunModel {
     @Bindable String bq_1
     @Bindable String bq_2
     //@Bindable String tie
-    List<String> fset = ['qf','pf', 'boost', 'mm', 'bf_1', 'bf_2', 'bf_0', 'bq_1', 'bq_2', 'bq_0']
+    List<String> fset = ['qf','pf','pf2','pf3','ps','ps2','ps3', 'boost', 'mm', 'bf_1', 'bf_2', 'bf_0', 'bq_1', 'bq_2', 'bq_0']
     List<String> fmultiple = ['bf', 'bq']
     //associate each bf to bf1...
     Map fbf = [:]

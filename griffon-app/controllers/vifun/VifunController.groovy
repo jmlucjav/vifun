@@ -1,6 +1,5 @@
 package vifun
 
-import java.lang.invoke.MethodHandles;
 import org.apache.log4j.Logger;
 import com.google.common.collect.*
 
@@ -18,7 +17,6 @@ class VifunController {
     // these will be injected by Griffon
     def model
     def view
-    private static final Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass())
 
     GroovyShell shell = new GroovyShell()
 
@@ -54,6 +52,12 @@ class VifunController {
                 public void caretUpdate(CaretEvent arg0) {
                     int dot = arg0.getDot();
                     int mark = arg0.getMark();
+                    if (dot < mark) {
+                        //allow selecting from right to left tool
+                        def temp = dot
+                        dot = mark
+                        mark = temp
+                    }
                     if (dot != mark) {
                         arg0.source.setSelectionColor(Color.BLUE)
                         def sel = arg0.source.getSelectedText()
@@ -292,9 +296,14 @@ class VifunController {
             model.currentMap = result
             log.debug "Results: ${model.q} ${result}"
             model.ctable.clear()
-            result.each { d ->
+            int nbresults = Math.min(result.size(), (model.rows as Integer))
+            for (i in 0..nbresults-1){
+                def d = result.getAt(i)
                 def line = ''
                 def fstring = ''
+                if (!d){
+                    log.debug "NULL doc in result $i"
+                }
                 d.solrDocument.each {
                     if (!it.key.equals(model.solr.idfield) && !it.key.equals('score')) {
                         fstring += (fstring ? '|' : '') + it.value
