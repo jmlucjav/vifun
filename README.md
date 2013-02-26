@@ -35,7 +35,7 @@ Requirements
 -------------------
 
 - **/select** handler should be available, and not have any **&lt;appends&gt; or &lt;invariants&gt;**, as it could interfere with how vifun works.
-- Java6 is needed (maybe it runs on Java5 too). A JRE should be enough.
+- **Java7** is needed (I will upload a new version that run on JDK1.6 shortly). A JRE should be enough.
 
 Getting started
 -------------------
