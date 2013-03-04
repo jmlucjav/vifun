@@ -45,7 +45,7 @@ application(title: 'vifun',
                 label 'rest:' 
                 textField text: bind('rest', source: model, mutual: true), columns: 30, constraints: "wrap, span 3"
                 label '(i.e sfield=store&pt=45.15,-93.85)', constraints: "wrap, span 3"
-                button ("Run Query" , enabled: bind{model.enabledQuery}, name: 'runQuery', actionPerformed: controller.runQuery, constraints: "wrap")
+                brun = button ("Run Query" , enabled: bind{model.enabledQuery}, name: 'runQuery', actionPerformed: controller.runQuery, constraints: "wrap")
                 //errMsgP = scrollPane (constraints: "growx, growy, width 0:0:400, height 0:0:100, spanx 2, spany 2", visible: bind{model.enabledErrMsg}) {
                 errMsgP = scrollPane (constraints: "growx, growy, width 200:350:400, height 50:100:100, spanx 2, spany 2, hidemode 3", visible: bind{model.enabledErrMsg}) {
                     errMsg = textArea(text: bind('errMsg', source: model, mutual: true), constraints: "growx, hidemode 3", visible: bind{model.enabledErrMsg}, rows:2, columns: 25, editable:false)
@@ -74,17 +74,13 @@ application(title: 'vifun',
                 lbq_0 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_0}; bq_0 = textField name: "bq_0", text: bind("bq_0", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_0}
                 lbq_1 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_1}; bq_1 = textField name: "bq_1", text: bind("bq_1", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_1}
                 lbq_2 = label 'bq:', constraints: "hidemode 3", visible: bind{model.enabledbq_2}; bq_2 = textField name: "bq_2", text: bind("bq_2", source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledbq_2}
-                lboost = label 'boost:', constraints: "hidemode 3", visible: bind{model.enabledboost};
-                boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledboost};
-                lmm = label 'mm:', constraints: "hidemode 3", visible: bind{model.enabledmm};
-                mm = textField name: 'mm', text: bind('mm', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledmm};
-                //ltie = label 'tie:'
-                //tie = textField name: 'tie', text: bind('tie', source: model, mutual: true), columns: 70, constraints: "wrap, span 3"
-                sl = slider(id:'sl',constraints: "wrap, span", enabled: bind{model.enabledSlider}, value: bind(target: model, targetProperty:'tweakedFValueNew', validator: {!sl.valueIsAdjusting}))
-                sl.setPaintTicks(true)
-                sl.setPaintLabels(true)
+                lboost = label 'boost:', constraints: "hidemode 3", visible: bind{model.enabledboost}; boost = textField name: 'boost', text: bind('boost', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledboost};
+                lmm = label 'mm:', constraints: "hidemode 3", visible: bind{model.enabledmm}; mm = textField name: 'mm', text: bind('mm', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledmm};
+                ltie = label 'tie:', constraints: "hidemode 3", visible: bind{model.enabledtie}; tie = textField name: 'tie', text: bind('tie', source: model, mutual: true), columns: 70, constraints: "wrap, span 3, hidemode 3", visible: bind{model.enabledtie};
+                //sl = slider(id:'sl',constraints: "wrap, span", enabled: bind{model.enabledSlider}, value: bind(target: model, targetProperty:'tweakedFValueNew', validator: {!sl.valueIsAdjusting}))
+                sl = slider(new JFloatSlider(), id:'sl',constraints: "wrap, span", enabled: bind{model.enabledSlider}, value: bind(target: model, targetProperty:'tweakedFValueNewTemp', validator: {!sl.valueIsAdjusting}))
                 sl.setPreferredSize(new Dimension(500,20))
-                label(text:bind(source:sl, sourceProperty:'value'), visible: bind{model.enabledSlider}, border:lineBorder(color:Color.GREEN))
+                label(text:bind('tweakedFValueNew', source:model), visible: bind{model.enabledSlider}, border:lineBorder(color:Color.GREEN))
                 button ("Set current value", enabled: bind{model.enabledSlider},name: 'setValueSlider', actionPerformed: controller.setValue, constraints: "left") 
                 button ("Increase limits", enabled: bind{model.enabledSlider},name: 'largerSlider', actionPerformed: controller.largerSlider, constraints: "left") 
             }

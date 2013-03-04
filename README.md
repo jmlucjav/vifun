@@ -23,7 +23,7 @@ handler. If you are fed up of: change a number a bit, restart Solr, run the same
 Features
 ------------
 
-- Can tweak numeric values in the following params: **qf, pf, pf2, pf3, ps, ps2, ps3, bf, bq, boost, mm** (others can be easily added) even in **&lt;appends&gt; or &lt;invariants&gt;**
+- Can tweak numeric values (int or float) in the following params: **qf, pf, pf2, pf3, ps, ps2, ps3, bf, bq, boost, mm, tie** (others can be easily added) even in **&lt;appends&gt; or &lt;invariants&gt;**
 - View side by side a Baseline query result and how it changes when you gradually change each value in the params
 - Colorized values, color depends on how the document does related to baseline query
 - Tooltips give you Explain info 

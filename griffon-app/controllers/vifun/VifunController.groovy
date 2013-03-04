@@ -22,7 +22,9 @@ class VifunController {
 
     void mvcGroupInit(Map args) {
         model.propertyChange = {
-            if (it.propertyName == 'tweakedFValueNew') {
+            if (it.propertyName == 'tweakedFValueNewTemp') {
+                //we need the float value from the slider
+                model.tweakedFValueNew = view.sl.getFloatValue()
                 doLater {
                     runQueryAndCompare()
                 }
@@ -42,6 +44,15 @@ class VifunController {
                 model.enabledErrMsg = model.errMsg && true
                 model.fset.each { 
                     model."enabled$it" = model."$it" && true
+                }
+            }
+            if (it.propertyName == 'handlerText') {
+                //init textboxes etc with usual values for testing if current user is me and in dev
+                //I could not get it to work from the beggining (select handler etc, so at least do it here)
+                if (Environment.current==Environment.DEVELOPMENT && System.getenv()['USERNAME'].equals('jm')) {
+                    model.q = 'ma fa'    
+                    model.rest = 'pt=31.34,-98.23'
+                    view.brun.requestFocus()
                 }
             }
         }
@@ -73,6 +84,7 @@ class VifunController {
         }
     }
 
+
     def selectTarget(String fname, String ftext, String fsel, source, mark) {
         edt {
             if (!model.enabledBind) return
@@ -88,51 +100,12 @@ class VifunController {
             view."l$fname".foreground = Color.RED
             view."l$fname".text = "$fname ($fsel)"
             //init slider values too
-            def selasint = fsel.toFloat().toInteger()
-            //mm limit to [0,100]
-            if (model.tweakedFName.equals('mm')) {
-                view.sl.minimum = 0
-                view.sl.maximum = 100
-                view.sl.majorTickSpacing = 10
-            } else {
-                if (selasint > 0) {
-                    view.sl.minimum = 0
-                    view.sl.maximum = 10 * selasint
-                    view.sl.majorTickSpacing = selasint
-                } else if (selasint == 0) {
-                    view.sl.minimum = -10
-                    view.sl.maximum = 10
-                    view.sl.majorTickSpacing = 2
-                } else {
-                    view.sl.minimum = 10 * selasint
-                    view.sl.maximum = 0
-                    view.sl.majorTickSpacing = -selasint
-                }
-            }
-            view.sl.value = selasint
-            view.sl.setLabelTable(setSliderLabels());
-            view.sl.setPaintLabels(true);
+            def selasint = fsel.toFloat()
+            view.sl.initValues(model.tweakedFName, selasint)
         }
-    }
-    //using this method is not enought, somthing to do with edt etc
-    def setSliderLabels() {
-        //customize labels
-        Hashtable labelTable = new Hashtable();
-        labelTable.put(new Integer(0), new JLabel("0"));
-        labelTable.put(new Integer(view.sl.minimum), new JLabel(view.sl.minimum as String));
-        labelTable.put(new Integer(view.sl.maximum), new JLabel(view.sl.maximum as String));
-        return labelTable
     }
 
-    def largerSlider = {
-        if (!model.tweakedFName.equals('mm')) {
-            view.sl.minimum *= 10
-            view.sl.maximum *= 10
-            view.sl.majorTickSpacing = (view.sl.maximum - view.sl.minimum) / 2
-            view.sl.setLabelTable(setSliderLabels());
-            view.sl.setPaintLabels(true);
-        }
-    }
+    def largerSlider = { view.sl.increaseLimits() }
 
     def resetFFieldsLabels() {
         model.fset.each { view."l$it".foreground = Color.BLACK }
@@ -269,7 +242,7 @@ class VifunController {
         view.baselineParam.toolTipText = view.currentParam.toolTipText
     }
     def setValue = {
-        model."${model.tweakedFName}" = model.tweakedFFormula.replace(model.tweakedFValue, model.tweakedFValueNew)
+        model."${model.tweakedFName}" = model.tweakedFFormula.replace(model.tweakedFValue, ""+view.sl.getFloatValue())
     }
 
     def runQuery(boolean tweaking) {

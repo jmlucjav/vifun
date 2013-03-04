@@ -62,6 +62,7 @@ class VifunModel {
     @Bindable boolean enabledps3
     @Bindable boolean enabledboost
     @Bindable boolean enabledmm
+    @Bindable boolean enabledtie
     @Bindable boolean enabledbf_0
     @Bindable boolean enabledbf_1
     @Bindable boolean enabledbf_2
@@ -85,6 +86,7 @@ class VifunModel {
     @Bindable String ps3
     @Bindable String boost
     @Bindable String mm
+    @Bindable String tie
     //several 
     @Bindable String bf_0
     @Bindable String bf_1
@@ -92,8 +94,7 @@ class VifunModel {
     @Bindable String bq_0
     @Bindable String bq_1
     @Bindable String bq_2
-    //@Bindable String tie
-    List<String> fset = ['qf','pf','pf2','pf3','ps','ps2','ps3', 'boost', 'mm', 'bf_1', 'bf_2', 'bf_0', 'bq_1', 'bq_2', 'bq_0']
+    List<String> fset = ['qf','pf','pf2','pf3','ps','ps2','ps3', 'boost', 'mm', 'tie', 'bf_1', 'bf_2', 'bf_0', 'bq_1', 'bq_2', 'bq_0']
     List<String> fmultiple = ['bf', 'bq']
     //associate each bf to bf1...
     Map fbf = [:]
@@ -107,6 +108,7 @@ class VifunModel {
     @Bindable String tweakedFValue
     //we store the pos to just replace that value
     @Bindable int tweakedFValuePos
+    @Bindable String tweakedFValueNewTemp
     @Bindable String tweakedFValueNew
 
     float maxScoreDiff
