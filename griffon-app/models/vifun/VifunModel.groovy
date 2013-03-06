@@ -21,7 +21,6 @@ import ca.odell.glazedlists.*
 import ca.odell.glazedlists.gui.*
 import ca.odell.glazedlists.swing.*
 
-
 class VifunModel {
     SolrOps solr = new SolrOps()
     @Bindable String solrurl = "http://localhost:8983/solr/core0"
@@ -110,6 +109,9 @@ class VifunModel {
     @Bindable int tweakedFValuePos
     @Bindable String tweakedFValueNewTemp
     @Bindable String tweakedFValueNew
+    //scroll
+    @Bindable boolean synchScroll = true
+    def origCVerScroll, origCHorScroll  
 
     float maxScoreDiff
     //glazedlist stuff

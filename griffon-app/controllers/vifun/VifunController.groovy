@@ -245,6 +245,16 @@ class VifunController {
         model."${model.tweakedFName}" = model.tweakedFFormula.replace(model.tweakedFValue, ""+view.sl.getFloatValue())
     }
 
+    def toggleSynch = {
+        if (model.synchScroll){
+            view.cscr.getHorizontalScrollBar().setModel(view.bscr.getHorizontalScrollBar().getModel());
+            view.cscr.getVerticalScrollBar().setModel(view.bscr.getVerticalScrollBar().getModel());
+        }else{
+            view.cscr.getHorizontalScrollBar().setModel(model.origCHorScroll);
+            view.cscr.getVerticalScrollBar().setModel(model.origCVerScroll);
+        }
+    }
+
     def runQuery(boolean tweaking) {
         model.maxScoreDiff = 0
         //build params and search

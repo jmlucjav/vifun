@@ -11,7 +11,6 @@ import ca.odell.glazedlists.gui.*
 import ca.odell.glazedlists.*
 import javax.swing.JTable
 
-
 application(title: 'vifun',
   preferredSize: [1300, 900],
   pack: true,
@@ -88,12 +87,14 @@ application(title: 'vifun',
         panel(border:lineBorder(color:Color.BLACK), name:'resPanel', layout:new MigLayout('fill'), constraints: "east, growx, growy, width 500:1200:1600, gapy 0:0:0, gapx 0:0:0") {
             //button ("Save Baseline", constraints: "south, width 150:150:150", enabled: bind{model.enabledTake}, actionPerformed: controller.takeBaselineSnapshot)
             panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:640:950") {
-                label 'Current Result'
-                scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
+                panel(layout:new MigLayout('top, flowx'), visible: bind{model.baselineMap!=null}, constraints: "growx") {
+                    label 'Current Result                                                                                          ', constraints:"west, span 3"
+                    checkBox 'Sync scroll', constraints: "east", actionPerformed: controller.toggleSynch, selected: bind("synchScroll", source:model, mutual:true)
+                }
+                cscr = scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
                     ctable = table( new CurrentTable(), id: 'ctable') {
                         tableFormat = defaultTableFormat(columns: model.columns)
                         eventTableModel(source: model.ctable, format: tableFormat)
-                        //installTableComparatorChooser(source: model.ctable)
                     }
                     //setup custom comparator where needed (delta cols)
                     TableComparatorChooser tableSorter = TableComparatorChooser.install(ctable, model.ctable, AbstractTableComparatorChooser.SINGLE_COLUMN);
@@ -106,7 +107,7 @@ application(title: 'vifun',
             }
             panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0, width 200:500:700") {
                 label 'Baseline Result'
-                scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
+                bscr = scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
                     table( new BaselineTable(), id: 'btable') {
                         tableFormat = defaultTableFormat(columns: model.columnsbaseline)
                         eventTableModel(source: model.btable, format: tableFormat)
@@ -115,6 +116,12 @@ application(title: 'vifun',
                 }
                 baselineParam = textArea(text: bind('baselineParam', source: model, mutual: true),constraints: "growx", visible: bind{model.enabledBaselineParam}, editable:false)
             }
+            //sync scrolling
+            model.origCHorScroll = cscr.getHorizontalScrollBar().getModel()
+            model.origCVerScroll = cscr.getVerticalScrollBar().getModel()
+            cscr.getHorizontalScrollBar().setModel(bscr.getHorizontalScrollBar().getModel());
+            cscr.getVerticalScrollBar().setModel(bscr.getVerticalScrollBar().getModel());
+            //customize tables            
             ctable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS)
             ctable.columnModel.getColumn(0).setPreferredWidth(40)
             ctable.columnModel.getColumn(0).setMaxWidth(40)
