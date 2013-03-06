@@ -3,7 +3,7 @@ import javax.swing.*
 //starting point taken from http://www.developpez.net/forums/d314533/java/interfaces-graphiques-java/awt-swing/jslider-float/
 public class JFloatSlider extends JSlider
 {
-    private final int SCALE = 100;
+    private int SCALE;
     private String param
     private float min
     private float max
@@ -11,8 +11,9 @@ public class JFloatSlider extends JSlider
 
     public JFloatSlider(){}
 
-    public void initValues(String tparam, float selasint)
+    public void initValues(String tparam, float selasint, int scale)
     {
+        SCALE = scale
         param = tparam
         this.setPaintLabels(true);
         //this.setPaintTicks(true);
@@ -42,28 +43,38 @@ public class JFloatSlider extends JSlider
     }
 
     public void increaseLimits() { 
-        if (!param.equals('mm') && param.equals('mm')) {
+        if (!param.equals('mm') && !param.equals('tie')) {
             setMinimum((10*getMinimum()) as Integer);
             min *= 10
             setMaximum((10*getMaximum()) as Integer);
             max *= 10
             tick *= 10
+            setLabels()
         }
-        setLabels()
     }
 
     public void setLabels() { 
         Hashtable ht = new Hashtable();
         for (float i = min; i <= max; i+=tick)
         {
-            JLabel l = new JLabel(""+i);
+            JLabel l = new JLabel(SCALE>1 ? ""+i : ""+(i as Integer));
             ht.put(new Integer((int)Math.rint(i*SCALE)), l);
         }
         this.setLabelTable(ht);
-        this.setMinorTickSpacing((int)(tick * SCALE / 4));
+        def ticksp = (int)((getMaximum()-getMinimum())/20)
+        if (!ticksp){
+            ticksp = 1
+        }
+        this.setMinorTickSpacing(ticksp);
         this.setPaintTicks(true);
     }
 
-    public float getFloatValue() { return (float)getValue()/(float)SCALE; }
+    public String getFloatValue() { 
+        if (SCALE>1){
+            return (float)getValue()/(float)SCALE;
+        }else{
+            return getValue()
+        }
+    }
     
 }

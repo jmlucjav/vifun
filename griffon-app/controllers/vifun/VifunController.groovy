@@ -8,7 +8,7 @@ import javax.swing.event.CaretEvent
 import javax.swing.event.CaretListener
 import java.awt.Color
 import java.awt.Font
-
+import javax.swing.*
 import java.awt.event.ActionEvent
 import java.awt.event.FocusListener
 import java.beans.PropertyChangeListener
@@ -75,8 +75,8 @@ class VifunController {
                         def text = arg0.source.getText()
                         //if not number of not whole number reject
                         if (!sel.isNumber()) return
-                        if (mark > 0 && text[mark - 1].isNumber()) return
-                        if (dot < text.size() && text[dot].isNumber()) return
+                        if (mark > 0 && (text[mark - 1].isNumber() || text[mark - 1].equals('.'))) return
+                        if (dot < text.size() && (text[dot].isNumber() || text[dot].equals('.'))) return
                         selectTarget(arg0.source.name, arg0.source.text, sel.trim(), arg0.source, mark)
                     }
                 }
@@ -101,7 +101,11 @@ class VifunController {
             view."l$fname".text = "$fname ($fsel)"
             //init slider values too
             def selasint = fsel.toFloat()
-            view.sl.initValues(model.tweakedFName, selasint)
+            def scale = 1
+            if (fsel.contains('.')){
+                scale = 100
+            }
+            view.sl.initValues(model.tweakedFName, selasint, scale)
         }
     }
 
@@ -256,6 +260,12 @@ class VifunController {
     }
 
     def runQuery(boolean tweaking) {
+        //clear error first
+        model.errMsg = ''
+        view.errMsgP.invalidate()
+        view.panel.validate()
+        javax.swing.SwingUtilities.getRoot(view.panel).pack()
+        view.panel.repaint()
         model.maxScoreDiff = 0
         //build params and search
         def params
@@ -285,7 +295,8 @@ class VifunController {
                 def line = ''
                 def fstring = ''
                 if (!d){
-                    log.debug "NULL doc in result $i"
+                    log.error "NULL doc in result $i"
+                    break
                 }
                 d.solrDocument.each {
                     if (!it.key.equals(model.solr.idfield) && !it.key.equals('score')) {
