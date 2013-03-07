@@ -44,7 +44,7 @@ application(title: 'vifun',
                 label 'rest:' 
                 textField text: bind('rest', source: model, mutual: true), columns: 30, constraints: "wrap, span 3"
                 label '(i.e sfield=store&pt=45.15,-93.85)', constraints: "wrap, span 3"
-                brun = button ("Run Query" , enabled: bind{model.enabledQuery}, name: 'runQuery', actionPerformed: controller.runQuery, constraints: "wrap")
+                brun = button ("Create Baseline" , enabled: bind{model.enabledQuery}, name: 'runQuery', actionPerformed: controller.runQuery, constraints: "wrap")
                 //errMsgP = scrollPane (constraints: "growx, growy, width 0:0:400, height 0:0:100, spanx 2, spany 2", visible: bind{model.enabledErrMsg}) {
                 errMsgP = scrollPane (constraints: "growx, growy, width 200:350:400, height 50:100:100, spanx 2, spany 2, hidemode 3", visible: bind{model.enabledErrMsg}) {
                     errMsg = textArea(text: bind('errMsg', source: model, mutual: true), constraints: "growx, hidemode 3", visible: bind{model.enabledErrMsg}, rows:2, columns: 25, editable:false)

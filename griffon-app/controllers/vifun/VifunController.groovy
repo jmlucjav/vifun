@@ -51,8 +51,9 @@ class VifunController {
             if (it.propertyName == 'handlerText') {
                 //init textboxes etc with usual values for testing if current user is me and in dev
                 //I could not get it to work from the beggining (select handler etc, so at least do it here)
-                if (Environment.current==Environment.DEVELOPMENT && System.getenv()['USERNAME'].equals('jm')) {
+                if (Environment.current==Environment.DEVELOPMENT && System.getenv()['USERNAME'].equals('jm') && '/suggesti'.equals(model.handler)) {
                     model.q = 'ma fa'    
+                    model.rows = '200'    
                     model.rest = 'pt=31.34,-98.23'
                     view.brun.requestFocus()
                 }
