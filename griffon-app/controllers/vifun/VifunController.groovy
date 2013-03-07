@@ -12,6 +12,8 @@ import javax.swing.*
 import java.awt.event.ActionEvent
 import java.awt.event.FocusListener
 import java.beans.PropertyChangeListener
+import groovy.swing.*
+import org.apache.commons.lang3.*
 
 class VifunController {
     // these will be injected by Griffon
@@ -257,6 +259,49 @@ class VifunController {
             view.cscr.getHorizontalScrollBar().setModel(model.origCHorScroll);
             view.cscr.getVerticalScrollBar().setModel(model.origCVerScroll);
         }
+    }
+
+    def showExplainComparison(explcur, explbas, String docdesc){
+        def swingBuilder = new SwingBuilder()
+        JEditorPane msg = new JEditorPane()
+        createExplainCompText(explcur, explbas, msg)
+        log.debug "$msg"
+        JScrollPane scrollPane = new JScrollPane(msg);  
+        Object[] oarr = []
+        final JOptionPane optionPane = new JOptionPane(scrollPane, JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_OPTION, null, oarr, null);
+        final JDialog dialog = new JDialog();
+        dialog.setTitle(docdesc)
+        dialog.setModal(false)
+        dialog.setContentPane(optionPane);
+        dialog.pack()
+        dialog.show()
+    }
+
+    def createExplainCompText(explcur, explbas, JEditorPane editorPane){
+        editorPane.contentType = "text/html"
+        //font must be set here instead of the html in order to work in a JEditorPane
+        editorPane.setFont(new Font("Consolas", Font.PLAIN, 11))
+        editorPane.editable = false
+        //build the text
+        def text =''
+        def lbas = explbas.readLines()
+        def lcur = explcur.readLines()
+        int widest = lcur*.size().max()
+        int nblines = Math.max(lbas.size(), lcur.size())
+        for (i in 0..nblines-1){
+            text += formatDiffLine(widest, i<lcur.size()?lcur[i]:"", i<lbas.size()?lbas[i]:"")
+        }
+        editorPane.text = "<html>$text</html>"
+    }
+    def String formatDiffLine(int widest, String c, String b){
+        if (c.trim().equals(b.trim()) && c.trim().size()==0) return ""
+        def col = 'black'
+        if (!c.equals(b)) { col = 'red' }
+        def size = "3"
+        def cur = StringUtils.rightPad(c, widest, " ").replaceAll(' ', '&nbsp;')
+        def bas = b.replaceAll(' ', '&nbsp;')
+        def temp = /<font color="$col">$cur|$bas<\/font><br\/>/
+        return temp
     }
 
     def runQuery(boolean tweaking) {

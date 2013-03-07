@@ -4,9 +4,8 @@ import javax.swing.JTable
 import javax.swing.JToolTip
 import javax.swing.table.TableCellRenderer
 import javax.swing.table.TableModel
-import java.awt.Color
-import java.awt.Component
-import java.awt.event.MouseEvent
+import java.awt.*
+import java.awt.event.*
 
 public class CurrentTable extends JTable {
     //taken from http://grepcode.com/file/repo1.maven.org/maven2/net.sourceforge.jadex/jadex-tools-comanalyzer/2.2.1/jadex/tools/comanalyzer/ToolColor.java
@@ -15,6 +14,30 @@ public class CurrentTable extends JTable {
     public static final Color LIGHT_GREEN = new Color(0x40, 0xFF, 0x40)
     public static final Color DARK_GREEN = new Color(0x00, 0xC0, 0x00)
     def vmodel = griffon.util.ApplicationHolder.application.models.vifun
+
+    public CurrentTable(){
+        super()
+        addMouseListener(new MouseAdapter() {
+          public void mouseClicked(MouseEvent e) {
+            if (e.getClickCount() == 2) {
+              JTable target = (JTable)e.getSource();
+              int row = target.getSelectedRow();
+              int column = target.getSelectedColumn();
+              int modelRow = convertRowIndexToModel(row);
+              showScoringInfo(modelRow)
+            }
+          }
+        })
+    }
+
+    private void showScoringInfo(int rowIndex){
+        TableModel tmodel = getModel();
+        String id = vmodel.currentMap[rowIndex].id
+        String explcur = vmodel.currentMap[rowIndex].explain
+        def basdoc = vmodel.baselineMap.find { it.id == id }
+        String explbas = basdoc.explain
+        griffon.util.ApplicationHolder.application.controllers.vifun.showExplainComparison(explcur, explbas, getModel().getValueAt(rowIndex, 2))
+    }
 
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
         Component c = super.prepareRenderer(renderer, row, column);
