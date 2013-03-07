@@ -126,6 +126,7 @@ class SolrOps {
         // needed by vifun
         params.set("wt", "javabin");
         params.set("debugQuery", "true");
+        params.set(CommonParams.QT, griffon.util.ApplicationHolder.application.config.vifun.handler);
         return params
     }
 

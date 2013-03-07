@@ -18,3 +18,5 @@ log4j = {
 
 //multliplier to ask for nb rows for baseline
 vifun.baseline.rows.multiplier = 5
+//what handler to use to send our requests, surround in quotes if starts with /
+vifun.handler = "/select"
