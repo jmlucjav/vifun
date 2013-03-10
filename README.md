@@ -51,7 +51,6 @@ Getting started
     - **rest**: in case you need to add more params, for example: sfield, fq etc)
 ![query params](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-qparams.jpg)
 - **Create Baseline**. The two panels on the right will show the same result, sorted by score. 
-![results](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-results.jpg)
 - Use the mouse to select the number you want to tweak in Score params (select all the digits). Note the label of the field is highlighted with current value. Notice that you can also manually edit the param contents.
 ![target selection](https://github.com/jmlucjav/vifun/raw/master/img/screenshot-selecttarget.jpg)
 - Move the slider, release and see how a new query is run, and you can compare how result changes with the current value. In the Current
