@@ -2,6 +2,7 @@ package vifun
 
 import javax.swing.JTable
 import javax.swing.JToolTip
+import javax.swing.event.ListSelectionListener
 import javax.swing.table.TableCellRenderer
 import javax.swing.table.TableModel
 import java.awt.Color
@@ -10,6 +11,10 @@ import java.awt.event.MouseEvent
 
 public class BaselineTable extends JTable {
     def vmodel = griffon.util.ApplicationHolder.application.models.vifun
+
+    public BaselineTable(){
+        super()
+    }
 
     //http://docs.oracle.com/javase/tutorial/uiswing/components/table.html#celltooltip
     public String getToolTipText(MouseEvent e) {

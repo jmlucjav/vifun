@@ -18,6 +18,7 @@ package vifun
 
 import groovy.beans.Bindable
 import ca.odell.glazedlists.*
+import ca.odell.glazedlists.event.*
 import ca.odell.glazedlists.gui.*
 import ca.odell.glazedlists.swing.*
 
@@ -51,6 +52,7 @@ class VifunModel {
     @Bindable boolean enabledCurrentParam
     @Bindable boolean enabledBaselineParam
     @Bindable boolean enabledErrMsg
+    @Bindable boolean enabledCompare
     //scoring stuff
     @Bindable boolean enabledqf
     @Bindable boolean enabledpf
@@ -135,4 +137,20 @@ class VifunModel {
     //EventList btable = new BasicEventList(), {a, b -> a.pos <=> b.pos} as Comparator)
     EventList ctable = new SortedList(new BasicEventList(), {a, b -> a.pos <=> b.pos} as Comparator)
     EventList btable = new SortedList(new BasicEventList(), {a, b -> a.pos <=> b.pos} as Comparator)
+    //selected docs 
+    @Bindable def bseldoc,cseldoc
+    def clistener = { event ->
+        log.debug "${event.sourceList}"
+        if (event.sourceList[0]){
+            def rowIndex = event.sourceList[0].pos
+            cseldoc = currentMap[rowIndex]
+        }
+    } as ListEventListener
+    def blistener = { event ->
+        log.debug "${event.sourceList}"
+        if (event.sourceList[0]){
+            def rowIndex = event.sourceList[0].pos
+            bseldoc = baselineMap[rowIndex]
+        }       
+    } as ListEventListener
 }

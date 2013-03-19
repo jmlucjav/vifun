@@ -47,7 +47,7 @@ class SolrOps {
             map.pos = i++
             map.id = doc.getFieldValue(idfield)
             map.score = doc.get("score")
-            map.explain = rsp.explainMap.get(map.id)
+            map.explain = formatExplain(rsp.explainMap.get(map.id))
             def fmap = [:]
             doc.getFieldNames().each { it ->
                 fmap."${it}" = doc.getFieldValue(it)
@@ -59,6 +59,42 @@ class SolrOps {
             results << map
         }
         return results
+    }
+
+    // move to prev line this: ), product of:
+    def formatExplain(String ex){
+        def list = ex.readLines()
+        for (i in 0..list.size()-1){
+            if ('), product of:'.equals(list[i])){
+                list[i-1]+=list[i]
+                list[i]=''
+            }
+        }
+        //another pass to write ruler
+        def vertlines = []
+        list.eachWithIndex() { obj, i ->
+            def oneline = formatExplainLine(i, obj, vertlines)
+            list[i] = oneline
+        }
+        return list.collect{it}.findAll{it}.join('\n')
+    }
+
+    def formatExplainLine(int k, String ex, vertlines){
+        def LINK = '|'
+        if (!k || !ex || !ex.trim()) return ex
+        StringBuffer r = new StringBuffer(ex)
+        def space =0
+        while (' '.equals(ex[space]) && space<ex.size()){
+            if (vertlines.contains(space)){
+                r.replace(space, space+1, LINK)
+            }
+            space++
+        }
+        if (space>2 && space<ex.size()){
+            r.replace(space-1, space, LINK)
+            vertlines << space-1
+        }
+        return r.toString()
     }
 
     //take prev and cur result list and display curr+changes

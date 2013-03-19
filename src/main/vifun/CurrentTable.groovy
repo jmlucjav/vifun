@@ -2,6 +2,7 @@ package vifun
 
 import javax.swing.JTable
 import javax.swing.JToolTip
+import javax.swing.event.ListSelectionListener
 import javax.swing.table.TableCellRenderer
 import javax.swing.table.TableModel
 import java.awt.*
@@ -36,7 +37,7 @@ public class CurrentTable extends JTable {
         String explcur = vmodel.currentMap[rowIndex].explain
         def basdoc = vmodel.baselineMap.find { it.id == id }
         String explbas = basdoc.explain
-        griffon.util.ApplicationHolder.application.controllers.vifun.showExplainComparison(explcur, explbas, getModel().getValueAt(rowIndex, 2))
+        griffon.util.ApplicationHolder.application.controllers.vifun.showExplainComparison(explcur, explbas, basdoc.name)
     }
 
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
@@ -50,7 +51,7 @@ public class CurrentTable extends JTable {
         }
         //  Color row based on a cell value
         if (isRowSelected(row)) {
-            //c.setBackground(Color.YELLOW)
+            c.setBackground(Color.BLUE)
             return c
         }
         float halfRows

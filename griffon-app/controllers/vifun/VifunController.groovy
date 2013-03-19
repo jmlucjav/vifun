@@ -44,6 +44,7 @@ class VifunController {
                 model.enabledCurrentParam = model.currentMap != null
                 model.enabledBaselineParam = model.baselineMap != null
                 model.enabledErrMsg = model.errMsg && true
+                model.enabledCompare = model.bseldoc && model.cseldoc
                 model.fset.each { 
                     model."enabled$it" = model."$it" && true
                 }
@@ -55,6 +56,11 @@ class VifunController {
                     model.q = 'ma fa'    
                     model.rows = '200'    
                     model.rest = 'pt=31.34,-98.23'
+                    view.brun.requestFocus()
+                }
+                if (Environment.current==Environment.DEVELOPMENT && System.getenv()['USERNAME'].equals('jm') && model.handlers.containsKey('/browsePaying') && '/browse'.equals(model.handler)) {
+                    model.q = 'paris'    
+                    model.rows = '20'    
                     view.brun.requestFocus()
                 }
             }
@@ -262,6 +268,12 @@ class VifunController {
         }
     }
 
+    def showCompare = {
+        if (model.bseldoc && model.cseldoc){
+            showExplainComparison(model.cseldoc.explain, model.bseldoc.explain, "${model.cseldoc.name} / ${model.bseldoc.name}")
+        }
+    }
+
     def showExplainComparison(explcur, explbas, String docdesc){
         def swingBuilder = new SwingBuilder()
         JEditorPane msg = new JEditorPane()
@@ -301,7 +313,7 @@ class VifunController {
         def size = "3"
         def cur = StringUtils.rightPad(c, widest, " ").replaceAll(' ', '&nbsp;')
         def bas = b.replaceAll(' ', '&nbsp;')
-        def temp = /<font color="$col">$cur|$bas<\/font><br\/>/
+        def temp = /<font color="$col">$cur $bas<\/font><br\/>/
         return temp
     }
 
@@ -349,6 +361,7 @@ class VifunController {
                         fstring += (fstring ? '|' : '') + it.value
                     }
                 }
+                d.name = fstring
                 String bdpos
                 String bdscore
                 if (tweaking) {

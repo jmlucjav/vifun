@@ -88,11 +88,14 @@ application(title: 'vifun',
             //button ("Save Baseline", constraints: "south, width 150:150:150", enabled: bind{model.enabledTake}, actionPerformed: controller.takeBaselineSnapshot)
             panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:640:950") {
                 panel(layout:new MigLayout('top, flowx'), visible: bind{model.baselineMap!=null}, constraints: "growx") {
-                    label 'Current Result                                                                                          ', constraints:"west, span 3"
+                    label 'Current Result                                                              ', constraints:"west, span 2"
+                    button ("Compare selected docs", enabled: bind{model.enabledCompare}, actionPerformed: controller.showCompare, constraints: "left, span 4") 
                     checkBox 'Sync scroll', constraints: "east", actionPerformed: controller.toggleSynch, selected: bind("synchScroll", source:model, mutual:true)
                 }
                 cscr = scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
-                    ctable = table( new CurrentTable(), id: 'ctable') {
+                    selectionModel = new EventSelectionModel(model.ctable) 
+                    selectionModel.selectionMode = ListSelectionModel.SINGLE_SELECTION 
+                    ctable = table( new CurrentTable(), id: 'ctable', selectionModel: selectionModel) {
                         tableFormat = defaultTableFormat(columns: model.columns)
                         eventTableModel(source: model.ctable, format: tableFormat)
                     }
@@ -105,16 +108,26 @@ application(title: 'vifun',
                 }
                 currentParam = textArea(text: bind('currentParam', source: model, mutual: true), constraints: "growx", visible: bind{model.enabledCurrentParam}, editable:false)
             }
-            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0, width 200:500:700") {
-                label 'Baseline Result'
+            panel(layout:new MigLayout('top, fill, flowy', 'nogrid'), visible: bind{model.baselineMap!=null}, constraints: "growx, growy, width 200:500:700") {
+                panel(layout:new MigLayout('top, flowx'), visible: bind{model.baselineMap!=null}, constraints: "growx") {
+                    label 'Baseline Result'
+                    //button just to make both scrollpanes be at same level
+                    button ("", enabled: false, visible: false, constraints: "") 
+                }
                 bscr = scrollPane (constraints: "growx, growy, gapy 0:0:0, gapx 0:0:0") {
-                    table( new BaselineTable(), id: 'btable') {
+                    selectionModelb = new EventSelectionModel(model.btable) 
+                    selectionModelb.selectionMode = ListSelectionModel.SINGLE_SELECTION 
+                    table( new BaselineTable(), id: 'btable', selectionModel: selectionModelb) {
                         tableFormat = defaultTableFormat(columns: model.columnsbaseline)
                         eventTableModel(source: model.btable, format: tableFormat)
                         installTableComparatorChooser(source: model.btable)
                     }
                 }
                 baselineParam = textArea(text: bind('baselineParam', source: model, mutual: true),constraints: "growx", visible: bind{model.enabledBaselineParam}, editable:false)
+            }
+            noparent { 
+                selectionModel.selected.addListEventListener(model.clistener) 
+                selectionModelb.selected.addListEventListener(model.blistener) 
             }
             //sync scrolling
             model.origCHorScroll = cscr.getHorizontalScrollBar().getModel()
