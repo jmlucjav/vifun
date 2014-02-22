@@ -414,6 +414,7 @@ class VifunController {
 
     def invalidateBaseline() {
         doLater {
+            model.bseldoc = model.cseldoc = null
             model.currentMap = null
             model.ctable.clear()
             model.currentParam = ''

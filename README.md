@@ -88,6 +88,12 @@ There are a couple of things that can be customized:
 - griffon-app\conf\BuildConfig.groovy
     - if you want to change memory settings, search for *memory* and customize as desired
 
+Related tools
+----------------
+
+- **LucidWorks Relevancy Workbench** looks pretty similar, tough web based, maybe inspired by vifun? http://www.lucidworks.com/market_app/lucidworks-relevancy-workbench/
+- **Open Enterprise Search Platform (OpenESP)** has integrated vifun https://github.com/openesp/openesp
+
 Contributing
 ----------------
 
