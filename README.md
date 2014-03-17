@@ -100,4 +100,4 @@ Contributing
 This is released under Apache 2.0 License. If you want to contribute, issues, pull requests, issues etc are welcome. I already
 opened issues for things I want to implement in the future.
 
-**Contact**: jmlucjav@gmail.com
+**Contact**: jmlucjav AT gmail DOT com
