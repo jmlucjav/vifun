@@ -40,9 +40,21 @@ class SolrOps {
         //log.info "Search Params: ${params.join('|')}"
         QueryResponse rsp = getServer().query(params);
         def results = []
+        def groups = false
         int i = 0
         def res = rsp.getResults()
-        res.each { doc ->
+        //if groups is enabled results must be got otherwise
+        if (!res){
+            GroupCommand gcomm = rsp.getGroupResponse().getValues().get(0)
+            res = gcomm.getValues()
+            groups = true
+        }
+        res.each { tdoc ->
+            def doc = tdoc
+            if (groups){
+                //this will work only when one doc per group is used
+                doc = tdoc.getResult().get(0)
+            }
             def map = [:]
             map.pos = i++
             map.id = doc.getFieldValue(idfield)
@@ -57,7 +69,7 @@ class SolrOps {
             // http://lucene.apache.org/solr/api/org/apache/solr/common/SolrDocument.html
             map.solrDocument = doc
             results << map
-        }
+         }
         return results
     }
 

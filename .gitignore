@@ -3,7 +3,8 @@ out/
 dist/
 staging/
 *.iml
-
+tags
+rel/
 
 #################
 ## Eclipse
