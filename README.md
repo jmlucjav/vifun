@@ -39,7 +39,7 @@ Requirements
 Getting started
 -------------------
 
-### [Click here to download latest version](http://code.google.com/p/vifun/downloads/detail?name=vifun-0.6.zip) and unzip
+### Click [here to download latest version](https://github.com/jmlucjav/vifun/releases) and unzip
 - Fix permssions first if on linux/OSX `chmod +x bin/vifun` 
 - Run `bin\vifun.bat` or `bin/vifun` 
 - Edit **Solr URL** to match yours (in Sol4.1 default is http://localhost:8983/solr/collection1 for example)
