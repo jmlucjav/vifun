@@ -5,6 +5,8 @@ staging/
 *.iml
 tags
 rel/
+data/
+griffon-app/conf/keys
 
 #################
 ## Eclipse

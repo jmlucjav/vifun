@@ -20,6 +20,8 @@ Imagine you have the params below, is 20 the right boosting for *name* or is it 
 This tool was developed in order to help me tweak the values of boosting functions etc in Solr, typically when using edismax
 handler. If you are fed up of: change a number a bit, restart Solr, run the same query to see how documents are scored now...then this tool is for you.
 
+You can watch a [screencast](https://www.youtube.com/watch?v=QGgM76HWIcA) showing how it works, and you can also read more abou it [in this post] (https://medium.com/@jmlucjav/tweaking-solr-edismax-relevancy-24b541c79bc9)
+
 Features
 ------------
 
@@ -27,14 +29,16 @@ Features
 - View side by side a Baseline query result and how it changes when you gradually change each value in the params
 - Colorized values, color depends on how the document does related to baseline query. Also colorized side by side comparison of both Explain info
 - Works on remote Solr installations
-- Tested with Solr 3.6, 4.0, 4.1 and 4.2 candidate (other versions would work too, as long as wt=javabin format is compatible)
+- Tested with Solr 3.6, 4.0, 4.X and 5.0 (other versions would work too, as long as wt=javabin format is compatible)
 - Developed using Groovy/Griffon
 
 Requirements
 -------------------
 
 - **/select** handler should be available (other handler can be used, see in Advanced Configuration), and not have any **&lt;appends&gt; or &lt;invariants&gt;**, as it could interfere with how vifun works.
-- **jdk1.6** is needed (maybe it runs on jdk1.5 too, but I didn't test). A JRE should be enough.
+- **jdk1.6** is needed (maybe it runs on jdk1.5 too, but I didn't test). A JRE should be enough. 
+- Last test I did was with Groovy 2.3.6 and JDK1.8
+
 
 Getting started
 -------------------

@@ -53,9 +53,9 @@ class VifunController {
                 //init textboxes etc with usual values for testing if current user is me and in dev
                 //I could not get it to work from the beggining (select handler etc, so at least do it here)
                 if (Environment.current==Environment.DEVELOPMENT && System.getenv()['USERNAME'].equals('jm') && '/suggesti'.equals(model.handler)) {
-                    model.q = 'ma fa'    
-                    model.rows = '200'    
-                    model.rest = 'pt=31.34,-98.23'
+                    model.q = 'san pal'
+                    model.rows = '80'
+                    model.rest = 'pt=45,-93'
                     view.brun.requestFocus()
                 }
                 if (Environment.current==Environment.DEVELOPMENT && System.getenv()['USERNAME'].equals('jm') && model.handlers.containsKey('/browsePaying') && '/browse'.equals(model.handler)) {
@@ -358,7 +358,7 @@ class VifunController {
                 }
                 d.solrDocument.each {
                     if (!it.key.equals(model.solr.idfield) && !it.key.equals('score')) {
-                        fstring += (fstring ? '|' : '') + it.value
+                        fstring += (fstring ? ' | ' : '') + it.value
                     }
                 }
                 d.name = fstring

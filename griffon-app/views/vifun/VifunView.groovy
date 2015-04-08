@@ -12,7 +12,7 @@ import ca.odell.glazedlists.*
 import javax.swing.JTable
 
 application(title: 'vifun',
-  preferredSize: [1300, 900],
+  preferredSize: [1600, 1030],
   pack: true,
   locationByPlatform:true,
   iconImage: imageIcon('/griffon-icon-48x48.png').image,
