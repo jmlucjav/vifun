@@ -20,7 +20,7 @@ Imagine you have the params below, is 20 the right boosting for *name* or is it 
 This tool was developed in order to help me tweak the values of boosting functions etc in Solr, typically when using edismax
 handler. If you are fed up of: change a number a bit, restart Solr, run the same query to see how documents are scored now...then this tool is for you.
 
-You can watch a [screencast](https://www.youtube.com/watch?v=QGgM76HWIcA) showing how it works, and you can also read more abou it [in this post] (https://medium.com/@jmlucjav/tweaking-solr-edismax-relevancy-24b541c79bc9)
+You can watch a screencast [![screencast](http://img.youtube.com/vi/QGgM76HWIcA/0.jpg)](https://www.youtube.com/watch?v=QGgM76HWIcA) showing how it works, and you can also read more abou it [in this post] (https://medium.com/@jmlucjav/tweaking-solr-edismax-relevancy-24b541c79bc9)
 
 Features
 ------------
